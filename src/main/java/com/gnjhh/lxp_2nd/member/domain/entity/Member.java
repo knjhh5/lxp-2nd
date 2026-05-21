@@ -1,7 +1,8 @@
-package com.gnjhh.lxp2nd.member;
+package com.gnjhh.lxp_2nd.member.domain.entity;
 
-import com.gnjhh.lxp2nd.course.Course;
-import com.gnjhh.lxp2nd.enrollment.Enrollment;
+import com.gnjhh.lxp_2nd.course.domain.entity.Course;
+import com.gnjhh.lxp_2nd.enrollment.domain.entity.Enrollment;
+import com.gnjhh.lxp_2nd.member.domain.vo.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

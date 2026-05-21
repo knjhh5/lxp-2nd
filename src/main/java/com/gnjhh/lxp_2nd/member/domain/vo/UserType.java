@@ -1,4 +1,4 @@
-package com.gnjhh.lxp2nd.member;
+package com.gnjhh.lxp_2nd.member.domain.vo;
 
 public enum UserType {
     STUDENT,

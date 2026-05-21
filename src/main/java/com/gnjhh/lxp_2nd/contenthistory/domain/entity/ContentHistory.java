@@ -1,10 +1,8 @@
-package com.gnjhh.lxp2nd.contenthistory;
+package com.gnjhh.lxp_2nd.contenthistory.domain.entity;
 
-import com.gnjhh.lxp2nd.content.Content;
-import com.gnjhh.lxp2nd.contenthistory.domain.vo.IsCompleted;
-import com.gnjhh.lxp2nd.enrollment.Enrollment;
+import com.gnjhh.lxp_2nd.content.domain.entity.Content;
+import com.gnjhh.lxp_2nd.enrollment.domain.entity.Enrollment;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,8 +30,8 @@ public class ContentHistory {
     @JoinColumn(name = "content_id", nullable = false)
     private Content content;
 
-    @Embedded
-    private IsCompleted completed = new IsCompleted(false);
+    @Column(name = "is_completed", nullable = false)
+    private boolean completed = false;
 
     @Column(name = "last_date")
     private LocalDateTime lastDate;
@@ -53,7 +51,7 @@ public class ContentHistory {
         return content;
     }
 
-    public IsCompleted getCompleted() {
+    public boolean isCompleted() {
         return completed;
     }
 

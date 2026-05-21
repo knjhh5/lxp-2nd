@@ -1,7 +1,7 @@
-package com.gnjhh.lxp2nd.content;
+package com.gnjhh.lxp_2nd.content.domain.entity;
 
-import com.gnjhh.lxp2nd.contenthistory.ContentHistory;
-import com.gnjhh.lxp2nd.course.Course;
+import com.gnjhh.lxp_2nd.contenthistory.domain.entity.ContentHistory;
+import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -1,4 +1,4 @@
-package com.gnjhh.lxp2nd;
+package com.gnjhh.lxp_2nd;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,5 +9,4 @@ public class Lxp2ndApplication {
     public static void main(String[] args) {
         SpringApplication.run(Lxp2ndApplication.class, args);
     }
-
 }

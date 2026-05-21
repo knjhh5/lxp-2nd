@@ -1,11 +1,10 @@
-package com.gnjhh.lxp2nd.course;
+package com.gnjhh.lxp_2nd.course.domain.entity;
 
-import com.gnjhh.lxp2nd.content.Content;
-import com.gnjhh.lxp2nd.course.domain.vo.Capacity;
-import com.gnjhh.lxp2nd.enrollment.Enrollment;
-import com.gnjhh.lxp2nd.member.Member;
+import com.gnjhh.lxp_2nd.content.domain.entity.Content;
+import com.gnjhh.lxp_2nd.course.domain.vo.Status;
+import com.gnjhh.lxp_2nd.enrollment.domain.entity.Enrollment;
+import com.gnjhh.lxp_2nd.member.domain.entity.Member;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -41,12 +40,12 @@ public class Course {
     @Column(name = "description")
     private String description;
 
-    @Embedded
-    private Capacity capacity;
+    @Column(name = "capacity", nullable = false)
+    private int capacity;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private CourseStatus status = CourseStatus.PRIVATE;
+    private Status status = Status.PRIVATE;
 
     @OneToMany(mappedBy = "course")
     private List<Enrollment> enrollments = new ArrayList<>();
@@ -73,11 +72,11 @@ public class Course {
         return description;
     }
 
-    public Capacity getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
-    public CourseStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 

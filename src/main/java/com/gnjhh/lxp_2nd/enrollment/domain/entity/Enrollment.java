@@ -1,11 +1,10 @@
-package com.gnjhh.lxp2nd.enrollment;
+package com.gnjhh.lxp_2nd.enrollment.domain.entity;
 
-import com.gnjhh.lxp2nd.contenthistory.ContentHistory;
-import com.gnjhh.lxp2nd.course.Course;
-import com.gnjhh.lxp2nd.enrollment.domain.vo.ProgressRate;
-import com.gnjhh.lxp2nd.member.Member;
+import com.gnjhh.lxp_2nd.contenthistory.domain.entity.ContentHistory;
+import com.gnjhh.lxp_2nd.course.domain.entity.Course;
+import com.gnjhh.lxp_2nd.enrollment.domain.vo.Status;
+import com.gnjhh.lxp_2nd.member.domain.entity.Member;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -40,10 +39,10 @@ public class Enrollment {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private EnrollmentStatus status = EnrollmentStatus.ACTIVE;
+    private Status status = Status.ACTIVE;
 
-    @Embedded
-    private ProgressRate progressRate;
+    @Column(name = "progress_rate", nullable = false)
+    private int progressRate = 0;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -69,11 +68,11 @@ public class Enrollment {
         return course;
     }
 
-    public EnrollmentStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public ProgressRate getProgressRate() {
+    public int getProgressRate() {
         return progressRate;
     }
 

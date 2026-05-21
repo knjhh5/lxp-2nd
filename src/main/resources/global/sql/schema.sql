@@ -55,9 +55,20 @@ CREATE TABLE enrollments (
                              progress_rate INT       NOT NULL DEFAULT 0,
                              created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                              updated_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+                            -- 핵심: ACTIVE일 때만 유니크 키 값을 가짐
+                             active_unique_key VARCHAR(50)
+                                 GENERATED ALWAYS AS (
+                                     CASE WHEN status = 'ACTIVE'
+                                              THEN CONCAT(student_id, '-', course_id)
+                                          ELSE NULL
+                                         END
+                                     ) VIRTUAL,
+
                              FOREIGN KEY (student_id) REFERENCES members(id),
                              FOREIGN KEY (course_id)  REFERENCES courses(id),
-                             CONSTRAINT chk_progress_rate CHECK (progress_rate BETWEEN 0 AND 100)
+                             CONSTRAINT chk_progress_rate CHECK (progress_rate BETWEEN 0 AND 100),
+                             CONSTRAINT uq_active_enrollment UNIQUE (active_unique_key)
 );
 
 -- Content(콘텐츠) 테이블
@@ -77,5 +88,6 @@ CREATE TABLE content_histories (
                                    is_completed  BOOLEAN   NOT NULL DEFAULT FALSE,
                                    last_date     TIMESTAMP NULL DEFAULT NULL,
                                    FOREIGN KEY (enrollment_id) REFERENCES enrollments(id),
-                                   FOREIGN KEY (content_id)    REFERENCES contents(id)
+                                   FOREIGN KEY (content_id)    REFERENCES contents(id),
+                                   UNIQUE KEY uk_enrollment_content (enrollment_id, content_id)
 );

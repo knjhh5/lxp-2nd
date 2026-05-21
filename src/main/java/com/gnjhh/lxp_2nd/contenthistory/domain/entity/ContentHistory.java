@@ -39,6 +39,12 @@ public class ContentHistory {
     protected ContentHistory() {
     }
 
+    public ContentHistory(Enrollment enrollment, Content content) {
+        this.enrollment = enrollment;
+        this.content = content;
+        this.completed = false;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,6 +1,5 @@
 package com.gnjhh.lxp_2nd.enrollment.domain.entity;
 
-import com.gnjhh.lxp_2nd.contenthistory.domain.entity.ContentHistory;
 import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import com.gnjhh.lxp_2nd.enrollment.domain.vo.Status;
 import com.gnjhh.lxp_2nd.member.domain.entity.Member;
@@ -14,11 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "enrollments")
@@ -50,10 +46,16 @@ public class Enrollment {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "enrollment")
-    private List<ContentHistory> contentHistories = new ArrayList<>();
-
     protected Enrollment() {
+    }
+
+    public Enrollment(Member student, Course course) {
+        this.student = student;
+        this.course = course;
+        this.status = Status.ACTIVE;
+        this.progressRate = 0;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -82,9 +84,5 @@ public class Enrollment {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
-    }
-
-    public List<ContentHistory> getContentHistories() {
-        return contentHistories;
     }
 }

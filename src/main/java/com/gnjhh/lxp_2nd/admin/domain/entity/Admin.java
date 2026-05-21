@@ -32,6 +32,13 @@ public class Admin {
     protected Admin() {
     }
 
+    public Admin(String adminId, String passwordHash) {
+        this.adminId = adminId;
+        this.passwordHash = passwordHash;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,8 +1,6 @@
 package com.gnjhh.lxp_2nd.course.domain.entity;
 
-import com.gnjhh.lxp_2nd.content.domain.entity.Content;
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
-import com.gnjhh.lxp_2nd.enrollment.domain.entity.Enrollment;
 import com.gnjhh.lxp_2nd.member.domain.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,10 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "courses")
@@ -47,13 +42,18 @@ public class Course {
     @Column(name = "status", nullable = false)
     private Status status = Status.PRIVATE;
 
-    @OneToMany(mappedBy = "course")
-    private List<Enrollment> enrollments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "course")
-    private List<Content> contents = new ArrayList<>();
-
     protected Course() {
+    }
+
+    public Course(String title, Member instructor, String description, int capacity) {
+        if (capacity < 1) {
+            throw new IllegalArgumentException("capacity must be at least 1");
+        }
+        this.title = title;
+        this.instructor = instructor;
+        this.description = description;
+        this.capacity = capacity;
+        this.status = Status.PRIVATE;
     }
 
     public Long getId() {
@@ -78,13 +78,5 @@ public class Course {
 
     public Status getStatus() {
         return status;
-    }
-
-    public List<Enrollment> getEnrollments() {
-        return enrollments;
-    }
-
-    public List<Content> getContents() {
-        return contents;
     }
 }

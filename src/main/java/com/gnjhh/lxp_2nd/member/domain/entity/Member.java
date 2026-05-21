@@ -1,7 +1,5 @@
 package com.gnjhh.lxp_2nd.member.domain.entity;
 
-import com.gnjhh.lxp_2nd.course.domain.entity.Course;
-import com.gnjhh.lxp_2nd.enrollment.domain.entity.Enrollment;
 import com.gnjhh.lxp_2nd.member.domain.vo.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,11 +8,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "members")
@@ -47,13 +42,16 @@ public class Member {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @OneToMany(mappedBy = "instructor")
-    private List<Course> courses = new ArrayList<>();
-
-    @OneToMany(mappedBy = "student")
-    private List<Enrollment> enrollments = new ArrayList<>();
-
     protected Member() {
+    }
+
+    public Member(String loginId, String passwordHash, String nickname, UserType userType) {
+        this.loginId = loginId;
+        this.passwordHash = passwordHash;
+        this.nickname = nickname;
+        this.userType = userType;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -86,13 +84,5 @@ public class Member {
 
     public LocalDateTime getDeletedAt() {
         return deletedAt;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public List<Enrollment> getEnrollments() {
-        return enrollments;
     }
 }

@@ -1,6 +1,5 @@
 package com.gnjhh.lxp_2nd.content.domain.entity;
 
-import com.gnjhh.lxp_2nd.contenthistory.domain.entity.ContentHistory;
 import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,10 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "contents")
@@ -24,7 +20,7 @@ public class Content {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "content_title", nullable = false)
+    @Column(name = "content_title", nullable = false, length = 100)
     private String contentTitle;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,10 +30,16 @@ public class Content {
     @Column(name = "order_index", nullable = false)
     private int orderIndex;
 
-    @OneToMany(mappedBy = "content")
-    private List<ContentHistory> contentHistories = new ArrayList<>();
-
     protected Content() {
+    }
+
+    public Content(String contentTitle, Course course, int orderIndex) {
+        if (orderIndex < 1) {
+            throw new IllegalArgumentException("orderIndex must be at least 1");
+        }
+        this.contentTitle = contentTitle;
+        this.course = course;
+        this.orderIndex = orderIndex;
     }
 
     public Long getId() {
@@ -54,9 +56,5 @@ public class Content {
 
     public int getOrderIndex() {
         return orderIndex;
-    }
-
-    public List<ContentHistory> getContentHistories() {
-        return contentHistories;
     }
 }

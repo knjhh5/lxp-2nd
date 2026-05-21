@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>403 - 접근 권한이 없습니다</title>
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main>
+  <div class="error-container">
+
+    <div class="error-icon">
+      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 8L12 20V40C12 56.4 24.8 71.6 40 75.2C55.2 71.6 68 56.4 68 40V20L40 8Z"
+              fill="#FEE2E2" stroke="#FCA5A5" stroke-width="2"/>
+        <path d="M30 30L50 50M50 30L30 50" stroke="#DC2626" stroke-width="3"
+              stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <p class="error-code">403</p>
+    <h1 class="error-title">접근 권한이 없습니다</h1>
+    <p class="error-description">
+      이 페이지에 접근할 수 있는 권한이 없습니다.<br>
+      관리자 권한이 필요한 페이지입니다.
+    </p>
+
+    <div class="error-actions">
+      <a href="javascript:history.back()" class="btn-secondary">이전 페이지로</a>
+      <a th:href="@{/courses}" class="btn-primary">홈으로 가기</a>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>

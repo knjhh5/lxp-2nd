@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>강의 목록 - LXP 학습 플랫폼</title>
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/course.css}">
+</head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<main>
+  <div class="course-list-header">
+    <h1>강의 목록</h1>
+    <p>다양한 강의를 탐색하고 학습을 시작하세요</p>
+  </div>
+
+  <div class="course-grid">
+    <!-- 강의 카드 반복 -->
+    <div class="course-card" th:each="course : ${courses}">
+      <div class="course-thumbnail">
+        <img th:if="${course.thumbnailUrl != null}"
+             th:src="${course.thumbnailUrl}"
+             th:alt="${course.title}">
+        <!-- 썸네일 없을 때 placeholder -->
+        <div class="course-thumbnail-placeholder" th:if="${course.thumbnailUrl == null}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
+               viewBox="0 0 24 24" fill="none" stroke="#1D6EF5"
+               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+        </div>
+        <!-- 카테고리 태그 -->
+<!--        <span class="course-tag" th:text="${course.category}">카테고리</span>-->
+        <!-- 찜 버튼 -->
+        <button class="btn-wish" type="button" aria-label="찜하기">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+               viewBox="0 0 24 24" fill="none" stroke="#6B7280"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06
+                                     a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78
+                                     1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="course-card-body">
+        <div class="course-card-title" th:text="${course.title}">강의 제목</div>
+        <div class="course-card-instructor" th:text="${course.instructorName}">강사명</div>
+        <div class="course-card-desc" th:text="${course.description}">강의 설명</div>
+        <a class="btn-detail" th:href="@{/courses/{id}(id=${course.id})}">강의 상세보기</a>
+      </div>
+    </div>
+
+    <!-- 강의가 없을 때 -->
+    <div th:if="${#lists.isEmpty(courses)}"
+         style="grid-column: 1/-1; text-align: center; padding: 3rem 0;
+                        color: var(--color-text-muted); font-size: 14px;">
+      등록된 강의가 없습니다.
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

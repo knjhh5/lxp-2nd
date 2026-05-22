@@ -15,6 +15,7 @@ public class CourseController {
     private static final int MAX_SIZE = 50;
     private static final String DEFAULT_SORT = "latest";
     private static final String POPULAR_SORT = "popular";
+    private static final String INVALID_PAGE_MESSAGE = "유효하지 않은 페이지 번호입니다";
 
     private final CourseService courseService;
 
@@ -24,42 +25,57 @@ public class CourseController {
 
     @GetMapping("/courses")
     public String getCourses(
-            @RequestParam(defaultValue = "1") String page,
-            @RequestParam(defaultValue = "12") String size,
-            @RequestParam(defaultValue = "latest") String sort,
+            @RequestParam(defaultValue = "1") String pageNumber,
+            @RequestParam(defaultValue = "12") String pageSize,
+            @RequestParam(defaultValue = "latest") String sortBy,
             Model model) {
-        int currentPage = normalizePage(page);
-        int pageSize = normalizeSize(size);
-        String currentSort = normalizeSort(sort);
+        boolean invalidPage = isInvalidPage(pageNumber);
+        int currentPage = normalizePage(pageNumber);
+        int currentPageSize = normalizeSize(pageSize);
+        String currentSortBy = normalizeSort(sortBy);
 
         Page<CourseListResponseDto> coursePage =
-                courseService.findPublicCourses(currentSort, currentPage, pageSize);
+                courseService.findPublicCourses(currentSortBy, currentPage, currentPageSize);
 
         if (coursePage.getTotalPages() > 0 && currentPage > coursePage.getTotalPages()) {
-            return "redirect:/courses?page=1&size=" + pageSize + "&sort=" + currentSort;
+            return "redirect:/courses?pageNumber=1&pageSize="
+                    + currentPageSize
+                    + "&sortBy="
+                    + currentSortBy;
         }
 
+        if (invalidPage) {
+            model.addAttribute("errorMessage", INVALID_PAGE_MESSAGE);
+        }
         model.addAttribute("courses", coursePage.getContent());
         model.addAttribute("currentPage", currentPage);
-        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("pageSize", currentPageSize);
         model.addAttribute("totalCount", coursePage.getTotalElements());
         model.addAttribute("totalPages", coursePage.getTotalPages());
-        model.addAttribute("sort", currentSort);
+        model.addAttribute("sortBy", currentSortBy);
         return "course/home";
     }
 
-    private int normalizePage(String page) {
+    private boolean isInvalidPage(String pageNumber) {
         try {
-            int parsedPage = Integer.parseInt(page);
+            return Integer.parseInt(pageNumber) < DEFAULT_PAGE;
+        } catch (NumberFormatException exception) {
+            return true;
+        }
+    }
+
+    private int normalizePage(String pageNumber) {
+        try {
+            int parsedPage = Integer.parseInt(pageNumber);
             return Math.max(parsedPage, DEFAULT_PAGE);
         } catch (NumberFormatException exception) {
             return DEFAULT_PAGE;
         }
     }
 
-    private int normalizeSize(String size) {
+    private int normalizeSize(String pageSize) {
         try {
-            int parsedSize = Integer.parseInt(size);
+            int parsedSize = Integer.parseInt(pageSize);
             if (parsedSize < 1) {
                 return DEFAULT_SIZE;
             }
@@ -69,8 +85,8 @@ public class CourseController {
         }
     }
 
-    private String normalizeSort(String sort) {
-        if (POPULAR_SORT.equals(sort)) {
+    private String normalizeSort(String sortBy) {
+        if (POPULAR_SORT.equals(sortBy)) {
             return POPULAR_SORT;
         }
         return DEFAULT_SORT;

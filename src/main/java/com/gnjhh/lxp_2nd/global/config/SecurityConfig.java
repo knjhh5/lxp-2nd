@@ -44,6 +44,16 @@ public class SecurityConfig {
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
+                .formLogin(form -> {
+                    form.loginPage("/auth/login");
+                    form.loginProcessingUrl("/auth/login");
+                    form.usernameParameter("loginId");
+                    form.passwordParameter("password");
+
+                    form.defaultSuccessUrl("/course/home.html");
+                    form.failureUrl("/auth/login?errorMessage");
+                    form.permitAll();
+                })
                 .csrf(csrf -> csrf.disable());
         return http.build();
     }

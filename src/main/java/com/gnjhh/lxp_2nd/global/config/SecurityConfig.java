@@ -30,11 +30,20 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/login", "/auth/signup", "/courses", "/courses/**")
+                    auth.requestMatchers(
+                            "/auth/login",
+                            "/auth/signup",
+                            "/courses",
+                            "/courses/**")
                             .permitAll();
+                    auth.requestMatchers(
+                                "/enrollments",
+                                "/members/me/enrollments",
+                                "/members/me/enrollments/{courseId}")
+                            .authenticated();
+                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
-                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 }

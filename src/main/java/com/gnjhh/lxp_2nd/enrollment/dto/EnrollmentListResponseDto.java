@@ -7,10 +7,10 @@ public class EnrollmentListResponseDto {
     private final int progressRate;
 
     public EnrollmentListResponseDto(
-            Long id, Long courseId, String courseTitle, String instructorName, int progressRate) {
+            Long id, Long courseId, String courseTitle, String instructorName, Number progressRate) {
         this.id = id;
         this.course = new CourseSummaryDto(courseId, courseTitle, instructorName);
-        this.progressRate = progressRate;
+        this.progressRate = progressRate == null ? 0 : progressRate.intValue();
     }
 
     public Long getId() {

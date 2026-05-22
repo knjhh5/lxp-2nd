@@ -18,34 +18,133 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
                         course.id,
                         course.title,
                         instructor.nickname,
-                        enrollment.progressRate
+                        case
+                            when (
+                                select count(content.id)
+                                from Content content
+                                where content.course = course
+                            ) = 0 then 0
+                            else (
+                                (
+                                    select count(completedHistory.id)
+                                    from ContentHistory completedHistory
+                                    where completedHistory.enrollment = enrollment
+                                        and completedHistory.completed = true
+                                ) * 100 / (
+                                    select count(content.id)
+                                    from Content content
+                                    where content.course = course
+                                )
+                            )
+                        end
                     )
                     from Enrollment enrollment
                     join enrollment.course course
                     join course.instructor instructor
-                    left join ContentHistory contentHistory
-                        on contentHistory.enrollment = enrollment
                     where enrollment.student.id = :studentId
                         and enrollment.status = :status
                         and (
                             :learningStatus = 'all'
-                            or (:learningStatus = 'ongoing' and enrollment.progressRate < 100)
-                            or (:learningStatus = 'done' and enrollment.progressRate = 100)
+                            or (:learningStatus = 'ongoing' and (
+                                case
+                                    when (
+                                        select count(content.id)
+                                        from Content content
+                                        where content.course = course
+                                    ) = 0 then 0
+                                    else (
+                                        (
+                                            select count(completedHistory.id)
+                                            from ContentHistory completedHistory
+                                            where completedHistory.enrollment = enrollment
+                                                and completedHistory.completed = true
+                                        ) * 100 / (
+                                            select count(content.id)
+                                            from Content content
+                                            where content.course = course
+                                        )
+                                    )
+                                end
+                            ) < 100)
+                            or (:learningStatus = 'done' and (
+                                case
+                                    when (
+                                        select count(content.id)
+                                        from Content content
+                                        where content.course = course
+                                    ) = 0 then 0
+                                    else (
+                                        (
+                                            select count(completedHistory.id)
+                                            from ContentHistory completedHistory
+                                            where completedHistory.enrollment = enrollment
+                                                and completedHistory.completed = true
+                                        ) * 100 / (
+                                            select count(content.id)
+                                            from Content content
+                                            where content.course = course
+                                        )
+                                    )
+                                end
+                            ) = 100)
                         )
-                    group by enrollment.id, course.id, course.title, instructor.nickname,
-                        enrollment.progressRate, enrollment.createdAt
-                    order by coalesce(max(contentHistory.lastDate), enrollment.createdAt) desc,
+                    order by coalesce((
+                            select max(contentHistory.lastDate)
+                            from ContentHistory contentHistory
+                            where contentHistory.enrollment = enrollment
+                        ), enrollment.createdAt) desc,
                         enrollment.id desc
                     """,
             countQuery = """
                     select count(enrollment)
                     from Enrollment enrollment
+                    join enrollment.course course
                     where enrollment.student.id = :studentId
                         and enrollment.status = :status
                         and (
                             :learningStatus = 'all'
-                            or (:learningStatus = 'ongoing' and enrollment.progressRate < 100)
-                            or (:learningStatus = 'done' and enrollment.progressRate = 100)
+                            or (:learningStatus = 'ongoing' and (
+                                case
+                                    when (
+                                        select count(content.id)
+                                        from Content content
+                                        where content.course = course
+                                    ) = 0 then 0
+                                    else (
+                                        (
+                                            select count(completedHistory.id)
+                                            from ContentHistory completedHistory
+                                            where completedHistory.enrollment = enrollment
+                                                and completedHistory.completed = true
+                                        ) * 100 / (
+                                            select count(content.id)
+                                            from Content content
+                                            where content.course = course
+                                        )
+                                    )
+                                end
+                            ) < 100)
+                            or (:learningStatus = 'done' and (
+                                case
+                                    when (
+                                        select count(content.id)
+                                        from Content content
+                                        where content.course = course
+                                    ) = 0 then 0
+                                    else (
+                                        (
+                                            select count(completedHistory.id)
+                                            from ContentHistory completedHistory
+                                            where completedHistory.enrollment = enrollment
+                                                and completedHistory.completed = true
+                                        ) * 100 / (
+                                            select count(content.id)
+                                            from Content content
+                                            where content.course = course
+                                        )
+                                    )
+                                end
+                            ) = 100)
                         )
                     """)
     Page<EnrollmentListResponseDto> findMyEnrollments(
@@ -54,9 +153,61 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
             @Param("learningStatus") String learningStatus,
             Pageable pageable);
 
-    long countByStudentIdAndStatusAndProgressRateLessThan(
-            Long studentId, Status status, int progressRate);
-
-    long countByStudentIdAndStatusAndProgressRate(
-            Long studentId, Status status, int progressRate);
+    @Query(
+            """
+                    select count(enrollment)
+                    from Enrollment enrollment
+                    join enrollment.course course
+                    where enrollment.student.id = :studentId
+                        and enrollment.status = :status
+                        and (
+                            :learningStatus = 'all'
+                            or (:learningStatus = 'ongoing' and (
+                                case
+                                    when (
+                                        select count(content.id)
+                                        from Content content
+                                        where content.course = course
+                                    ) = 0 then 0
+                                    else (
+                                        (
+                                            select count(completedHistory.id)
+                                            from ContentHistory completedHistory
+                                            where completedHistory.enrollment = enrollment
+                                                and completedHistory.completed = true
+                                        ) * 100 / (
+                                            select count(content.id)
+                                            from Content content
+                                            where content.course = course
+                                        )
+                                    )
+                                end
+                            ) < 100)
+                            or (:learningStatus = 'done' and (
+                                case
+                                    when (
+                                        select count(content.id)
+                                        from Content content
+                                        where content.course = course
+                                    ) = 0 then 0
+                                    else (
+                                        (
+                                            select count(completedHistory.id)
+                                            from ContentHistory completedHistory
+                                            where completedHistory.enrollment = enrollment
+                                                and completedHistory.completed = true
+                                        ) * 100 / (
+                                            select count(content.id)
+                                            from Content content
+                                            where content.course = course
+                                        )
+                                    )
+                                end
+                            ) = 100)
+                        )
+                    """)
+    long countMyEnrollmentsByLearningStatus(
+            @Param("studentId") Long studentId,
+            @Param("status") Status status,
+            @Param("learningStatus") String learningStatus);
 }

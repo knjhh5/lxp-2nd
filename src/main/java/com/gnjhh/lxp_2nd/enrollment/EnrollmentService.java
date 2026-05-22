@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EnrollmentService {
 
-    private static final int COMPLETED_PROGRESS_RATE = 100;
+    private static final String ONGOING_LEARNING_STATUS = "ongoing";
+    private static final String DONE_LEARNING_STATUS = "done";
 
     private final EnrollmentRepository enrollmentRepository;
 
@@ -29,13 +30,13 @@ public class EnrollmentService {
 
     @Transactional(readOnly = true)
     public long countOngoingEnrollments(Long studentId) {
-        return enrollmentRepository.countByStudentIdAndStatusAndProgressRateLessThan(
-                studentId, Status.ACTIVE, COMPLETED_PROGRESS_RATE);
+        return enrollmentRepository.countMyEnrollmentsByLearningStatus(
+                studentId, Status.ACTIVE, ONGOING_LEARNING_STATUS);
     }
 
     @Transactional(readOnly = true)
     public long countDoneEnrollments(Long studentId) {
-        return enrollmentRepository.countByStudentIdAndStatusAndProgressRate(
-                studentId, Status.ACTIVE, COMPLETED_PROGRESS_RATE);
+        return enrollmentRepository.countMyEnrollmentsByLearningStatus(
+                studentId, Status.ACTIVE, DONE_LEARNING_STATUS);
     }
 }

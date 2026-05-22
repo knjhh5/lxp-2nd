@@ -1,11 +1,14 @@
 package com.gnjhh.lxp_2nd.member.dto;
 
+import java.beans.ConstructorProperties;
+
 public class MemberCreateRequestDto {
 
     private final String loginId;
     private final String password;
     private final String nickname;
 
+    @ConstructorProperties({"loginId", "password", "nickname"})
     public MemberCreateRequestDto(String loginId, String password, String nickname) {
         this.loginId = loginId;
         this.password = password;

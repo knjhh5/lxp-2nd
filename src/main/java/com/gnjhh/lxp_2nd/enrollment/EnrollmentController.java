@@ -14,7 +14,7 @@ public class EnrollmentController {
     private static final int DEFAULT_PAGE = 1;
     private static final int DEFAULT_SIZE = 12;
     private static final int MAX_SIZE = 50;
-    private static final String DEFAULT_STATUS = "all";
+    private static final String DEFAULT_STATUS = "ongoing";
     private static final String ONGOING_STATUS = "ongoing";
     private static final String DONE_STATUS = "done";
     private static final String INVALID_PAGE_MESSAGE = "유효하지 않은 페이지 번호입니다";
@@ -29,7 +29,7 @@ public class EnrollmentController {
     public String getMyEnrollments(
             @RequestParam(defaultValue = "1") String pageNumber,
             @RequestParam(defaultValue = "12") String pageSize,
-            @RequestParam(defaultValue = "all") String status,
+            @RequestParam(defaultValue = "ongoing") String status,
             HttpSession session,
             Model model) {
         Long loginMemberId = (Long) session.getAttribute("loginMemberId");

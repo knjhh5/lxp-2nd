@@ -41,7 +41,16 @@ public class AdminController {
             }
         }
 
+        if (pageNumber < 1) {
+            return "redirect:/admin/courses?pageNumber=1" + (status != null ? "&status=" + status : "");
+        }
+
         Page<CourseAdminListItemResponseDto> courses = adminService.getCourseListForAdmin(statusEnum, pageNumber, pageSize);
+
+        if (courses.getTotalPages() > 0 && pageNumber > courses.getTotalPages()) {
+            return "redirect:/admin/courses?pageNumber=1" + (status != null ? "&status=" + status : "");
+        }
+
         model.addAttribute("courses", courses);
         model.addAttribute("status", status);
         model.addAttribute("errorMessage", null);

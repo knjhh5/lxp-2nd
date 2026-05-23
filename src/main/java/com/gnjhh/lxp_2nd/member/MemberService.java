@@ -23,7 +23,7 @@ public class MemberService {
         if (memberRepository.existsByLoginId(memberCreateRequestDto.getLoginId())) {
             throw new IllegalStateException("이미 사용중인 아이디입니다.");
         } else if (memberRepository.existsByNickname(memberCreateRequestDto.getNickname())) {
-            throw new IllegalStateException("이미 사용중인 닉네입니다.");
+            throw new IllegalStateException("이미 사용중인 닉네임입니다.");
 
         }
 

@@ -27,7 +27,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
             errorMessage = "아이디 또는 비밀번호가 일치하지 않습니다.";
         }
 
-        request.setAttribute("errorMessage", errorMessage);
-        request.getRequestDispatcher("/auth/login").forward(request, response);
+        request.getSession().setAttribute("errorMessage", errorMessage);    //세션에 에러메세지 저장
+        response.sendRedirect("/auth/login");   //"/auth/login"으로 리다이렉트
     }
 }

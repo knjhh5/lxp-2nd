@@ -53,7 +53,7 @@ public class EnrollmentService {
         if (existingOpt.isPresent()) {
             Enrollment existingEnrollment = existingOpt.get();
             if (existingEnrollment.getStatus() == Status.ACTIVE) {
-                throw new IllegalStateException("이미 신청한 강의 입니다.");
+                throw new IllegalStateException("이미 신청한 강의입니다.");
             }
         }
         return enrollmentRepository.save(new Enrollment(student, course));

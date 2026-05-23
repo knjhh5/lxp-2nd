@@ -48,11 +48,10 @@ public class CourseService {
                 course.getTitle(),
                 course.getInstructor().getNickname(),
                 course.getDescription(),
-           null ,
+                null,
                 enrollCount,
                 course.getCapacity(),
-                contentDtos,
-                0
+                contentDtos
 
         );
     }

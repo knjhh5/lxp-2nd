@@ -12,11 +12,11 @@ public class CourseDetailDto {
     private int enrollCount;
     private int maxCapacity;
     private List<ContentDto> contents;
-    private int totalHours;
+
 
     public CourseDetailDto(Long id, String title, String instructorName,
             String description, String thumbnailUrl,
-            int enrollCount, int maxCapacity, List<ContentDto> contents,int totalHours) {
+            int enrollCount, int maxCapacity, List<ContentDto> contents) {
         this.id = id;
         this.title = title;
         this.instructorName = instructorName;
@@ -24,22 +24,45 @@ public class CourseDetailDto {
         this.enrollCount = enrollCount;
         this.maxCapacity = maxCapacity;
         this.contents = contents;
-        this.totalHours =totalHours;
+        this.thumbnailUrl = thumbnailUrl;
     }
 
 
-    public Long getId() { return id; }
-    public String getTitle() { return title; }
-    public String getInstructorName() { return instructorName; }
-    public String getDescription() { return description; }
-    public String getThumbnailUrl() { return thumbnailUrl; }
-    public int getEnrollCount() { return enrollCount; }
-    public int getMaxCapacity() { return maxCapacity; }
-    public List<ContentDto> getContents() { return contents; }
-    public int getTotalHours(){return totalHours;}
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getInstructorName() {
+        return instructorName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public int getEnrollCount() {
+        return enrollCount;
+    }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public List<ContentDto> getContents() {
+        return contents;
+    }
 
 
     public static class ContentDto {
+
         private String title;
         private int durationMinutes;
 
@@ -47,7 +70,13 @@ public class CourseDetailDto {
             this.title = title;
             this.durationMinutes = durationMinutes;
         }
-        public String getTitle() { return title; }
-        public int getDurationMinutes() { return durationMinutes; }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public int getDurationMinutes() {
+            return durationMinutes;
+        }
     }
 }

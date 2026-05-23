@@ -42,8 +42,6 @@ public class EnrollmentController {
             @ModelAttribute("enrollmentId") Long enrollmentId,
             Model model) {
 
-        System.out.println("enrollmentId = " + enrollmentId);
-
         if (enrollmentId != null && enrollmentId != 0L) {
             Enrollment enrollment = enrollmentService.getEnrollmentById(enrollmentId);
             int totalCount = enrollment.getCourse().getContents().size();

@@ -21,15 +21,30 @@ public class AdminController {
 
     @GetMapping("/courses")
     public String getCourseListForAdmin(
-            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "10") int pageSize,
             Model model) {
 
         // 로그인 기능 merge 이후 세션 확인 로직 추가
 
-        Page<CourseAdminListItemResponseDto> courses = adminService.getCourseListForAdmin(status, pageNumber, pageSize);
+        Status statusEnum = null;
+
+        if (status != null) {
+            try {
+                statusEnum = Status.valueOf(status);
+            } catch (IllegalArgumentException e) {
+                model.addAttribute("courses", adminService.getCourseListForAdmin(null, 1, pageSize));
+                model.addAttribute("status", null);
+                model.addAttribute("errorMessage", "유효하지 않은 승인 상태입니다.");
+                return "admin/home";
+            }
+        }
+
+        Page<CourseAdminListItemResponseDto> courses = adminService.getCourseListForAdmin(statusEnum, pageNumber, pageSize);
         model.addAttribute("courses", courses);
+        model.addAttribute("status", status);
+        model.addAttribute("errorMessage", null);
 
         return "admin/home";
     }

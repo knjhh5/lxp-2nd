@@ -22,7 +22,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
         if (loginId == null || loginId.isBlank()) {
             errorMessage = "아이디는 필수 입력 항목입니다.";
         } else if (password == null || password.isBlank()) {
-            errorMessage = "비밀번호를 필수 입력 항목입니다.";
+            errorMessage = "비밀번호는 필수 입력 항목입니다.";
         } else {
             errorMessage = "아이디 또는 비밀번호가 일치하지 않습니다.";
         }

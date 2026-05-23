@@ -6,16 +6,16 @@ import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import java.util.List;
 
 public class CourseDetailResponse {
-    
-    private final Long courseId;
+
+    private final Long id;
     private final String title;
     private final String instructorName;
     private final String description;
     private final List<ContentResponse> contents;
 
-    private CourseDetailResponse(Long courseId, String title, String instructorName,
+    private CourseDetailResponse(Long id, String title, String instructorName,
             String description, List<ContentResponse> contents) {
-        this.courseId = courseId;
+        this.id = id;
         this.title = title;
         this.instructorName = instructorName;
         this.description = description;
@@ -36,8 +36,8 @@ public class CourseDetailResponse {
         );
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public Long getId() {
+        return id;
     }
 
     public String getTitle() {

@@ -26,34 +26,32 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(
-                                    "/auth/login",
-                                    "/auth/signup",
-                                    "/courses",
-                                    "/courses/**")
-                            .permitAll();
-                    auth.requestMatchers(
-                                    "/enrollments",
-                                    "/members/me/enrollments",
-                                    "/members/me/enrollments/{courseId}")
-                            .authenticated();
-                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
-                    auth.anyRequest().authenticated();
-                })
-                .formLogin(form -> {
-                    form.loginPage("/auth/login");
-                    form.loginProcessingUrl("/auth/login");
-                    form.usernameParameter("loginId");
-                    form.passwordParameter("password");
-
-                    form.defaultSuccessUrl("/course/home.html");
-                    form.failureUrl("/auth/login?errorMessage");
-                    form.permitAll();
-                })
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/auth/login",
+                                "/auth/signup",
+                                "/courses",
+                                "/courses/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/enrollments",
+                                "/members/me/enrollments",
+                                "/members/me/enrollments/{courseId}"
+                        ).authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
+                        .usernameParameter("loginId")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/course/home.html")
+                        .failureUrl("/auth/login?errorMessage")
+                        .permitAll()
+                )
                 .csrf(csrf -> csrf.disable());
         return http.build();
     }

@@ -43,7 +43,7 @@ CREATE TABLE courses (
                          capacity      INT           NOT NULL,
                          status        ENUM('PRIVATE', 'PUBLIC', 'REJECTED') NOT NULL DEFAULT 'PRIVATE',
                          created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                         updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                         updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                          FOREIGN KEY (instructor_id) REFERENCES members(id),
                          CONSTRAINT chk_course_capacity CHECK (capacity >= 1)
 );

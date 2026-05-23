@@ -9,7 +9,9 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     // 수강인원 체크 로직
     int countByCourseIdAndStatus(Long courseId, Status status);
+
     // 중복 재신청 체크 로직
-    Optional<Enrollment> findByStudentIdAndCourseId(Long studentId,Long courseId);
+    Optional<Enrollment> findByStudentIdAndCourseId(Long studentId, Long courseId);
+
 }
 

@@ -88,6 +88,7 @@ public class Course {
         return status;
     }
 
+    public List<Content> getContents(){return contents;}
 
 
 }

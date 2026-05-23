@@ -2,12 +2,13 @@ package com.gnjhh.lxp_2nd.enrollment;
 
 import com.gnjhh.lxp_2nd.course.CourseService;
 import com.gnjhh.lxp_2nd.course.dto.CourseDetailDto;
+import com.gnjhh.lxp_2nd.enrollment.domain.entity.Enrollment;
 import jakarta.servlet.http.HttpSession;
-import java.util.zip.DataFormatException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,12 +38,27 @@ public class EnrollmentController {
     }
 
     @GetMapping("/course/member/detail")
-    public String myEnrollmentDetail() {
+    public String myEnrollmentDetail(
+            @ModelAttribute("enrollmentId") Long enrollmentId,
+            Model model) {
+
+        System.out.println("enrollmentId = " + enrollmentId);
+
+        if (enrollmentId != null && enrollmentId != 0L) {
+            Enrollment enrollment = enrollmentService.getEnrollmentById(enrollmentId);
+            int totalCount = enrollment.getCourse().getContents().size();
+
+            model.addAttribute("enrollment", enrollment);
+            model.addAttribute("completedCount", 0);
+            model.addAttribute("totalCount", totalCount);
+            model.addAttribute("completedContentIds", java.util.List.of());
+        }
+
         return "course/member/detail";
     }
 
 
-    @PostMapping("/courses/enroll")
+    @PostMapping("/enrollments")
     public String enrollcourse(@RequestParam("courseId") Long courseId, HttpSession session,
             RedirectAttributes rttr, Model model) {
 
@@ -55,47 +71,33 @@ public class EnrollmentController {
         }
 
         try {
-            enrollmentService.enroll(studentId, courseId);
-            rttr.addFlashAttribute("message", "수강신청에 완료되었습니다.");
+            Enrollment enrollment = enrollmentService.enroll(studentId, courseId);
+            rttr.addFlashAttribute("message", "수강 신청이 완료되었습니다.");
+            rttr.addFlashAttribute("enrollmentId", enrollment.getId());
 
-            model.addAttribute("enrollment", new Object() {
-                public int getProgressRate() { return 0; }
-                public Object getCourse() {
-                    return new Object() {
-                        public Long getId() { return courseId; }
-                        public String getTitle() { return "수강 신청 완료"; }
-                        public String getInstructorName() { return "강사"; }
-                        public String getDescription() { return "수강 신청이 완료되었습니다."; }
-                        public java.util.List<?> getContents() { return java.util.List.of(); }
-                    };
-                }
-            });
-            model.addAttribute("completedCount", 0);
-            model.addAttribute("totalCount", 0);
-            model.addAttribute("completedContentIds", java.util.List.of());
-
-
-            return "/course/member/detail";
+            return "redirect:/course/member/detail";
 
         } catch (IllegalArgumentException e) {
             rttr.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/error/404";
 
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             String msg = e.getMessage();
-            if (msg.contains("이미 신청한 강의입니다.")){
-                rttr.addFlashAttribute("errorMassage",msg);
+            if (msg.contains("이미 신청한 강의입니다.")) {
+                rttr.addFlashAttribute("errorMessage", msg);
                 return "redirect:/course/member/home";
             }
+
             CourseDetailDto dto = courseService.getCourseDetail(courseId);
-            model.addAttribute("course",dto);
-            model.addAttribute("errorMessage",msg);
+            model.addAttribute("course", dto);
+            model.addAttribute("errorMessage", msg);
             return "course/detail";
 
-        }catch (DataIntegrityViolationException e){
-            rttr.addFlashAttribute("errorMessage","이미 신창한 결과입니다.");
+        } catch (DataIntegrityViolationException e) {
+            rttr.addFlashAttribute("errorMessage", "이미 신청한 강의입니다.");
+            return "redirect:/course/member/home";
         }
-        return "redirect:/course/" + courseId;
+
 
     }
 

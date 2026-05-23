@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduAdmin - 강의 관리</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="logo">
+    <span class="logo-icon">🎓</span>
+    <span class="logo-text">EduAdmin</span>
+  </div>
+  <nav class="nav">
+    <a href="#" class="nav-item">
+      <span class="nav-icon">⊞</span>
+      Dashboard
+    </a>
+    <a href="#" class="nav-item active">
+      <span class="nav-icon">📖</span>
+      Courses
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">👥</span>
+      Students
+    </a>
+  </nav>
+  <div class="nav-bottom">
+    <a href="#" class="nav-item">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="page-header">
+    <h1 class="page-title">강의 관리 현황</h1>
+    <p class="page-subtitle">현재 등록된 강의 현황을 확인합니다.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">강의별 신청 현황</h2>
+      <div class="filter-tabs">
+        <button class="tab active">전체</button>
+        <button class="tab">공개</button>
+        <button class="tab">비공개</button>
+        <button class="tab">거절됨</button>
+      </div>
+    </div>
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th>강의명</th>
+        <th>정원</th>
+        <th>신청 인원</th>
+        <th>취소 인원</th>
+        <th>잔여석</th>
+        <th>상태</th>
+        <th>관리</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="course-name-cell">
+          <div class="course-icon course-icon--blue">&lt;/&gt;</div>
+          <div>
+            <div class="course-name">React 완벽 마스터</div>
+            <div class="course-sub">김강사</div>
+          </div>
+        </td>
+        <td>2,000</td>
+        <td>1,980</td>
+        <td>5</td>
+        <td class="text-danger">20</td>
+        <td><span class="badge badge--public">공개</span></td>
+        <td class="action-cell">
+          <button class="btn btn--approve">승인</button>
+          <button class="btn btn--reject">반려</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="course-name-cell">
+          <div class="course-icon course-icon--green">N</div>
+          <div>
+            <div class="course-name">Next.js 프레임워크 실무</div>
+            <div class="course-sub">김강사</div>
+          </div>
+        </td>
+        <td>1,500</td>
+        <td>1,234</td>
+        <td>12</td>
+        <td class="text-blue">266</td>
+        <td><span class="badge badge--public">공개</span></td>
+        <td class="action-cell">
+          <button class="btn btn--approve">승인</button>
+          <button class="btn btn--reject">반려</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="course-name-cell">
+          <div class="course-icon course-icon--gray">TS</div>
+          <div>
+            <div class="course-name">TypeScript 심화</div>
+            <div class="course-sub">김강사</div>
+          </div>
+        </td>
+        <td>1,000</td>
+        <td>1,000</td>
+        <td>0</td>
+        <td>0</td>
+        <td><span class="badge badge--private">비공개</span></td>
+        <td class="action-cell">
+          <button class="btn btn--approve">승인</button>
+          <button class="btn btn--reject btn--reject-active">반려</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="course-name-cell">
+          <div class="course-icon course-icon--purple">UI</div>
+          <div>
+            <div class="course-name">UI/UX 디자인 패턴</div>
+            <div class="course-sub">김강사</div>
+          </div>
+        </td>
+        <td>800</td>
+        <td>450</td>
+        <td>8</td>
+        <td class="text-blue">350</td>
+        <td><span class="badge badge--public">공개</span></td>
+        <td class="action-cell">
+          <button class="btn btn--approve">승인</button>
+          <button class="btn btn--reject">반려</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="course-name-cell">
+          <div class="course-icon course-icon--red">✕</div>
+          <div>
+            <div class="course-name">부적절한 강의 컨텐츠</div>
+            <div class="course-sub">김강사</div>
+          </div>
+        </td>
+        <td>100</td>
+        <td>0</td>
+        <td>0</td>
+        <td>100</td>
+        <td><span class="badge badge--rejected">거절됨</span></td>
+        <td class="action-cell">
+          <button class="btn btn--approve">승인</button>
+          <button class="btn btn--reject">반려</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="table-footer">
+      <span class="table-info"></span>
+      <div class="pagination">
+        <button class="page-btn page-btn--nav">&lsaquo;</button>
+        <button class="page-btn page-btn--active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn page-btn--nav">&rsaquo;</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

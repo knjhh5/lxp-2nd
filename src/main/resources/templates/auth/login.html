@@ -17,8 +17,10 @@
     <div class="auth-icon">
       <svg fill="none" height="26" stroke="#1D6EF5" stroke-width="2"
            viewBox="0 0 24 24" width="26" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" stroke-linecap="round"
-              stroke-linejoin="round"/>
+        <path
+            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
       </svg>
     </div>
 
@@ -45,7 +47,7 @@
           <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round"
                 stroke-linejoin="round"/>
         </svg>
-        <span>아이디 또는 비밀번호가 일치하지 않습니다</span>
+        <span th:text="${errorMessage}"></span>
       </div>
 
       <button class="btn-submit" type="submit">로그인</button>

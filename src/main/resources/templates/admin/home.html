@@ -47,10 +47,10 @@
     <div class="card-header">
       <h2 class="card-title">강의별 신청 현황</h2>
       <div class="filter-tabs">
-        <button class="tab active">전체</button>
-        <button class="tab">공개</button>
-        <button class="tab">비공개</button>
-        <button class="tab">거절됨</button>
+        <a th:href="@{/admin/courses}" class="tab" th:classappend="${status == null} ? 'active'">전체</a>
+        <a th:href="@{/admin/courses(status='PUBLIC')}" class="tab" th:classappend="${status?.name() == 'PUBLIC'} ? 'active'">공개</a>
+        <a th:href="@{/admin/courses(status='PRIVATE')}" class="tab" th:classappend="${status?.name() == 'PRIVATE'} ? 'active'">비공개</a>
+        <a th:href="@{/admin/courses(status='REJECTED')}" class="tab" th:classappend="${status?.name() == 'REJECTED'} ? 'active'">거절됨</a>
       </div>
     </div>
 
@@ -67,91 +67,23 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
+      <tr th:each="course : ${courses}">
         <td class="course-name-cell">
           <div class="course-icon course-icon--blue">&lt;/&gt;</div>
           <div>
-            <div class="course-name">React 완벽 마스터</div>
-            <div class="course-sub">김강사</div>
+            <div class="course-name" th:text="${course.title}"></div>
+            <div class="course-sub" th:text="${course.instructorName}"></div>
           </div>
         </td>
-        <td>2,000</td>
-        <td>1,980</td>
-        <td>5</td>
-        <td class="text-danger">20</td>
-        <td><span class="badge badge--public">공개</span></td>
-        <td class="action-cell">
-          <button class="btn btn--approve">승인</button>
-          <button class="btn btn--reject">반려</button>
+        <td th:text="${course.capacity}"></td>
+        <td th:text="${course.activeCount != null} ? ${course.activeCount} : '-'"></td>
+        <td th:text="${course.canceledCount != null} ? ${course.canceledCount} : '-'"></td>
+        <td th:text="${course.remainingSeats != null} ? ${course.remainingSeats} : '-'"></td>
+        <td>
+          <span th:if="${course.status.name() == 'PUBLIC'}" class="badge badge--public">공개</span>
+          <span th:if="${course.status.name() == 'PRIVATE'}" class="badge badge--private">비공개</span>
+          <span th:if="${course.status.name() == 'REJECTED'}" class="badge badge--rejected">거절됨</span>
         </td>
-      </tr>
-      <tr>
-        <td class="course-name-cell">
-          <div class="course-icon course-icon--green">N</div>
-          <div>
-            <div class="course-name">Next.js 프레임워크 실무</div>
-            <div class="course-sub">김강사</div>
-          </div>
-        </td>
-        <td>1,500</td>
-        <td>1,234</td>
-        <td>12</td>
-        <td class="text-blue">266</td>
-        <td><span class="badge badge--public">공개</span></td>
-        <td class="action-cell">
-          <button class="btn btn--approve">승인</button>
-          <button class="btn btn--reject">반려</button>
-        </td>
-      </tr>
-      <tr>
-        <td class="course-name-cell">
-          <div class="course-icon course-icon--gray">TS</div>
-          <div>
-            <div class="course-name">TypeScript 심화</div>
-            <div class="course-sub">김강사</div>
-          </div>
-        </td>
-        <td>1,000</td>
-        <td>1,000</td>
-        <td>0</td>
-        <td>0</td>
-        <td><span class="badge badge--private">비공개</span></td>
-        <td class="action-cell">
-          <button class="btn btn--approve">승인</button>
-          <button class="btn btn--reject btn--reject-active">반려</button>
-        </td>
-      </tr>
-      <tr>
-        <td class="course-name-cell">
-          <div class="course-icon course-icon--purple">UI</div>
-          <div>
-            <div class="course-name">UI/UX 디자인 패턴</div>
-            <div class="course-sub">김강사</div>
-          </div>
-        </td>
-        <td>800</td>
-        <td>450</td>
-        <td>8</td>
-        <td class="text-blue">350</td>
-        <td><span class="badge badge--public">공개</span></td>
-        <td class="action-cell">
-          <button class="btn btn--approve">승인</button>
-          <button class="btn btn--reject">반려</button>
-        </td>
-      </tr>
-      <tr>
-        <td class="course-name-cell">
-          <div class="course-icon course-icon--red">✕</div>
-          <div>
-            <div class="course-name">부적절한 강의 컨텐츠</div>
-            <div class="course-sub">김강사</div>
-          </div>
-        </td>
-        <td>100</td>
-        <td>0</td>
-        <td>0</td>
-        <td>100</td>
-        <td><span class="badge badge--rejected">거절됨</span></td>
         <td class="action-cell">
           <button class="btn btn--approve">승인</button>
           <button class="btn btn--reject">반려</button>
@@ -163,11 +95,15 @@
     <div class="table-footer">
       <span class="table-info"></span>
       <div class="pagination">
-        <button class="page-btn page-btn--nav">&lsaquo;</button>
-        <button class="page-btn page-btn--active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn page-btn--nav">&rsaquo;</button>
+        <a th:href="@{/admin/courses(status=${status}, pageNumber=${courses.number})}"
+           class="page-btn page-btn--nav">&lsaquo;</a>
+        <a th:each="i : ${#numbers.sequence(1, courses.totalPages)}"
+           th:href="@{/admin/courses(status=${status}, pageNumber=${i})}"
+           class="page-btn"
+           th:classappend="${i == courses.number + 1} ? 'page-btn--active'"
+           th:text="${i}"></a>
+        <a th:href="@{/admin/courses(status=${status}, pageNumber=${courses.number + 2})}"
+           class="page-btn page-btn--nav">&rsaquo;</a>
       </div>
     </div>
   </div>

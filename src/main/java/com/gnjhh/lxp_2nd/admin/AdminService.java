@@ -20,8 +20,8 @@ public class AdminService {
     }
 
     @Transactional
-    public Page<CourseAdminListItemResponseDto> getCourseListForAdmin(Status status, int page){
-        Pageable pageable = PageRequest.of(page - 1, 10);
+    public Page<CourseAdminListItemResponseDto> getCourseListForAdmin(Status status, int pageNumber, int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         Page<CourseAdminListResponseDto> courses = courseRepository.findCoursesWithEnrollmentCount(status, pageable);
 
         return courses.map(dto -> {

@@ -1,6 +1,7 @@
 package com.gnjhh.lxp_2nd.global.config;
 
 import com.gnjhh.lxp_2nd.global.security.LoginFailureHandler;
+import com.gnjhh.lxp_2nd.global.security.LoginSuccessHandler;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +17,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final LoginFailureHandler loginFailureHandler;
+    private final LoginSuccessHandler loginSuccessHandler;
 
-    public SecurityConfig(LoginFailureHandler loginFailureHandler) {
+    public SecurityConfig(LoginFailureHandler loginFailureHandler,
+            LoginSuccessHandler loginSuccessHandler) {
         this.loginFailureHandler = loginFailureHandler;
+        this.loginSuccessHandler = loginSuccessHandler;
     }
 
     @Bean
@@ -54,7 +58,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/auth/login")
                         .usernameParameter("loginId")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/course/home")
+                        .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailureHandler)
                 )
                 .csrf(csrf -> csrf.disable());

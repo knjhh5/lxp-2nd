@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,7 +25,8 @@ public class AdminController {
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "10") int pageSize,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         // 로그인 기능 merge 이후 세션 확인 로직 추가
 
@@ -34,10 +36,8 @@ public class AdminController {
             try {
                 statusEnum = Status.valueOf(status);
             } catch (IllegalArgumentException e) {
-                model.addAttribute("courses", adminService.getCourseListForAdmin(null, 1, pageSize));
-                model.addAttribute("status", null);
-                model.addAttribute("errorMessage", "유효하지 않은 승인 상태입니다.");
-                return "admin/home";
+                redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 승인 상태입니다.");
+                return "redirect:/admin/courses";
             }
         }
 

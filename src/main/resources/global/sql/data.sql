@@ -6,6 +6,7 @@
 INSERT INTO members (login_id, password_hash, nickname, user_type)
 VALUES ('student1', 'hashed_pass_capacity_test_1111111111111111', '김수강', 'STUDENT'),
        ('student2', 'hashed_pass_capacity_test_2222222222222222', '박공부', 'STUDENT'),
+       ('lxp', '$2a$10$bObgMV/G1pic.zuKzwVy4eRdAEeUow1/yTxcVQqPm9yF36wctnpju', 'lxplxp', 'STUDENT'),
        ('instructor1', 'hashed_pass_capacity_test_333333333333333', '이강사', 'INSTRUCTOR'),
        ('instructor2', 'hashed_pass_capacity_test_444444444444444', '최티처', 'INSTRUCTOR');
 

@@ -12,6 +12,10 @@
   alert("[[${errorMessage}]]");
 </script>
 
+<script th:if="${not #strings.isEmpty(successMessage)}">
+  alert("[[${successMessage}]]");
+</script>
+
 <!-- Sidebar -->
 <aside class="sidebar">
   <div class="logo">
@@ -89,8 +93,23 @@
           <span th:if="${course.status.name() == 'REJECTED'}" class="badge badge--rejected">거절됨</span>
         </td>
         <td class="action-cell">
-          <button class="btn btn--approve">승인</button>
-          <button class="btn btn--reject">반려</button>
+          <form th:if="${course.status.name() == 'PRIVATE'}"
+                th:action="@{/admin/courses/{courseId}(courseId=${course.courseId})}"
+                method="post"
+                style="display: inline;">
+            <input type="hidden" name="status" value="PUBLIC">
+            <button type="submit" class="btn btn--approve btn--approve-active">승인</button>
+          </form>
+          <button th:unless="${course.status.name() == 'PRIVATE'}" class="btn btn--approve" disabled>승인</button>
+
+          <form th:if="${course.status.name() == 'PRIVATE'}"
+                th:action="@{/admin/courses/{courseId}(courseId=${course.courseId})}"
+                method="post"
+                style="display: inline;">
+            <input type="hidden" name="status" value="REJECTED">
+            <button type="submit" class="btn btn--reject btn--reject-active">반려</button>
+          </form>
+          <button th:unless="${course.status.name() == 'PRIVATE'}" class="btn btn--reject" disabled>반려</button>
         </td>
       </tr>
       </tbody>
@@ -108,7 +127,7 @@
         <a th:each="i : ${#numbers.sequence(1, courses.totalPages)}"
            th:href="${status != null} ? @{/admin/courses(status=${status}, pageNumber=${i})} : @{/admin/courses(pageNumber=${i})}"
            class="page-btn"
-           th:classappend="${i == courses.number + 1} ? 'page-btn--active'"
+           th:classappend="${i == courses.number + 1} ? ' page-btn--active'"
            th:text="${i}"></a>
 
         <a th:href="${status != null} ? @{/admin/courses(status=${status}, pageNumber=${courses.number + 2})} : @{/admin/courses(pageNumber=${courses.number + 2})}"

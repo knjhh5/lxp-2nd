@@ -1,6 +1,7 @@
 package com.gnjhh.lxp_2nd.member;
 
 import com.gnjhh.lxp_2nd.member.dto.MemberCreateRequestDto;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,5 +55,15 @@ public class MemberController {
         }
 
         return "redirect:/auth/login";
+    }
+
+    @GetMapping("/login")
+    public String loginForm(HttpSession session, Model model) {
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+            session.removeAttribute("errorMessage");
+        }
+        return "auth/login";
     }
 }

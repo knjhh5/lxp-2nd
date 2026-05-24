@@ -1,6 +1,7 @@
 package com.gnjhh.lxp_2nd.admin;
 
 import com.gnjhh.lxp_2nd.course.CourseRepository;
+import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListItemResponseDto;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListResponseDto;
@@ -32,5 +33,12 @@ public class AdminService {
                 return new CourseAdminListItemResponseDto(dto, null, null, null);
             }
         });
+    }
+
+    @Transactional
+    public void changeCourseStatus(Long courseId, Status status) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다."));
+        course.changeStatus(status);
     }
 }

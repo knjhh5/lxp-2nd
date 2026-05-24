@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduAdmin - 강의 관리</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<script th:if="${not #strings.isEmpty(errorMessage)}">
+  alert("[[${errorMessage}]]");
+</script>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="logo">
+    <span class="logo-icon">🎓</span>
+    <span class="logo-text">EduAdmin</span>
+  </div>
+  <nav class="nav">
+    <a href="#" class="nav-item">
+      <span class="nav-icon">⊞</span>
+      Dashboard
+    </a>
+    <a href="#" class="nav-item active">
+      <span class="nav-icon">📖</span>
+      Courses
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">👥</span>
+      Students
+    </a>
+  </nav>
+  <div class="nav-bottom">
+    <a href="#" class="nav-item">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="page-header">
+    <h1 class="page-title">강의 관리 현황</h1>
+    <p class="page-subtitle">현재 등록된 강의 현황을 확인합니다.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">강의별 신청 현황</h2>
+      <div class="filter-tabs">
+        <a th:href="@{/admin/courses}" class="tab" th:classappend="${status == null} ? ' active'">전체</a>
+        <a th:href="@{/admin/courses(status='PUBLIC')}" class="tab" th:classappend="${status == 'PUBLIC'} ? ' active'">공개</a>
+        <a th:href="@{/admin/courses(status='PRIVATE')}" class="tab" th:classappend="${status == 'PRIVATE'} ? ' active'">비공개</a>
+        <a th:href="@{/admin/courses(status='REJECTED')}" class="tab" th:classappend="${status == 'REJECTED'} ? ' active'">거절됨</a>
+      </div>
+    </div>
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th>강의명</th>
+        <th>정원</th>
+        <th>신청 인원</th>
+        <th>취소 인원</th>
+        <th>잔여석</th>
+        <th>상태</th>
+        <th>관리</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="course : ${courses}">
+        <td class="course-name-cell">
+          <div class="course-icon course-icon--blue">&lt;/&gt;</div>
+          <div>
+            <div class="course-name" th:text="${course.title}"></div>
+            <div class="course-sub" th:text="${course.instructorName}"></div>
+          </div>
+        </td>
+        <td th:text="${course.capacity}"></td>
+        <td th:text="${course.activeCount != null} ? ${course.activeCount} : '-'"></td>
+        <td th:text="${course.canceledCount != null} ? ${course.canceledCount} : '-'"></td>
+        <td th:text="${course.remainingSeats != null} ? ${course.remainingSeats} : '-'"></td>
+        <td>
+          <span th:if="${course.status.name() == 'PUBLIC'}" class="badge badge--public">공개</span>
+          <span th:if="${course.status.name() == 'PRIVATE'}" class="badge badge--private">비공개</span>
+          <span th:if="${course.status.name() == 'REJECTED'}" class="badge badge--rejected">거절됨</span>
+        </td>
+        <td class="action-cell">
+          <button class="btn btn--approve">승인</button>
+          <button class="btn btn--reject">반려</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="table-footer">
+      <span class="table-info"></span>
+      <div class="pagination">
+        <a th:href="${status != null} ? @{/admin/courses(status=${status}, pageNumber=${courses.number})} : @{/admin/courses(pageNumber=${courses.number})}"
+           th:if="${!courses.first}"
+           class="page-btn page-btn--nav">&lsaquo;</a>
+        <span th:if="${courses.first}"
+              class="page-btn page-btn--nav disabled">&lsaquo;</span>
+
+        <a th:each="i : ${#numbers.sequence(1, courses.totalPages)}"
+           th:href="${status != null} ? @{/admin/courses(status=${status}, pageNumber=${i})} : @{/admin/courses(pageNumber=${i})}"
+           class="page-btn"
+           th:classappend="${i == courses.number + 1} ? 'page-btn--active'"
+           th:text="${i}"></a>
+
+        <a th:href="${status != null} ? @{/admin/courses(status=${status}, pageNumber=${courses.number + 2})} : @{/admin/courses(pageNumber=${courses.number + 2})}"
+           th:if="${!courses.last}"
+           class="page-btn page-btn--nav">&rsaquo;</a>
+        <span th:if="${courses.last}"
+              class="page-btn page-btn--nav disabled">&rsaquo;</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

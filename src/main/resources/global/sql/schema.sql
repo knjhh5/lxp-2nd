@@ -42,7 +42,7 @@ CREATE TABLE courses
     id            BIGINT AUTO_INCREMENT PRIMARY KEY,
     title         VARCHAR(100)                           NOT NULL,
     instructor_id BIGINT                                 NOT NULL,
-    description   TEXT                                   NOT NULL, -- ERD 반영: NULL → NOT NULL 변경
+    description   TEXT                                   NOT NULL,
     capacity      INT                                    NOT NULL,
     status        ENUM ('PRIVATE', 'PUBLIC', 'REJECTED') NOT NULL DEFAULT 'PRIVATE',
     created_at    TIMESTAMP                              NOT NULL DEFAULT CURRENT_TIMESTAMP,

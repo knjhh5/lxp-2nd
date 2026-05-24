@@ -43,9 +43,8 @@ public class SecurityConfig {
                                 "/courses/**"
                         ).permitAll()
                         .requestMatchers(
-                                "/enrollments",
-                                "/members/me/enrollments",
-                                "/members/me/enrollments/{courseId}"
+                                "/enrollments/**",
+                                "/members/me/**"
                         ).authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

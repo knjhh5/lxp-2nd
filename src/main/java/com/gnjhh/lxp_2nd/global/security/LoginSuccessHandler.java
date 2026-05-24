@@ -21,7 +21,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         if (isAdmin) {
             response.sendRedirect(request.getContextPath() + "/admin/courses");
         } else {
-            response.sendRedirect(request.getContextPath() + "/course/home");
+            response.sendRedirect(request.getContextPath() + "/courses");
         }
     }
 }

@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "courses")
@@ -42,6 +43,9 @@ public class Course {
     @Column(name = "status", nullable = false)
     private Status status = Status.PRIVATE;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     protected Course() {
     }
 
@@ -54,6 +58,7 @@ public class Course {
         this.description = description;
         this.capacity = capacity;
         this.status = Status.PRIVATE;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -78,6 +83,10 @@ public class Course {
 
     public Status getStatus() {
         return status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     // 강의 상태 변경

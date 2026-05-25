@@ -1,5 +1,9 @@
 package com.gnjhh.lxp_2nd.course;
-
+import com.gnjhh.lxp_2nd.course.domain.vo.Status;
+import com.gnjhh.lxp_2nd.course.dto.CourseListResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import com.gnjhh.lxp_2nd.content.ContentRepository;
 import com.gnjhh.lxp_2nd.content.domain.entity.Content;
 import com.gnjhh.lxp_2nd.content.dto.ContentProgressResponse;
@@ -20,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class CourseService {
+
+    private static final String POPULAR_SORT = "popular";
 
     private final CourseRepository courseRepository;
     private final ContentRepository contentRepository;
@@ -98,4 +104,21 @@ public class CourseService {
         }
         return (int) Math.round((double) completedCount / totalCount * 100);
     }
+
+    @Transactional(readOnly = true)
+    public Page<CourseListResponseDto> findPublicCourses(String sort, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        if (POPULAR_SORT.equals(sort)) {
+            return courseRepository.findPublicCoursesOrderByPopularity(
+                    Status.PUBLIC,
+                    com.gnjhh.lxp_2nd.enrollment.domain.vo.Status.ACTIVE,
+                    pageable);
+        }
+
+        return courseRepository.findPublicCoursesOrderByLatest(
+                Status.PUBLIC,
+                com.gnjhh.lxp_2nd.enrollment.domain.vo.Status.ACTIVE,
+                pageable);
+    }
+
 }

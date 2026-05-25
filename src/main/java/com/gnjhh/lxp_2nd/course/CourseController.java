@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CourseController {
 
     private static final int DEFAULT_PAGE = 1;
-    private static final int DEFAULT_SIZE = 12;
+    private static final int DEFAULT_SIZE = 6;
     private static final int MAX_SIZE = 50;
     private static final String DEFAULT_SORT = "latest";
     private static final String POPULAR_SORT = "popular";
@@ -27,35 +27,36 @@ public class CourseController {
 
     @GetMapping("/courses")
     public String getCourses(
-            @RequestParam(defaultValue = "1") String pageNumber,
-            @RequestParam(defaultValue = "12") String pageSize,
-            @RequestParam(defaultValue = "latest") String sortBy,
+            @RequestParam(name = "pageNumber", defaultValue = "1") String pageNumberParameter,
+            @RequestParam(name = "pageSize", defaultValue = "6") String pageSizeParameter,
+            @RequestParam(name = "sortBy", defaultValue = "latest") String sortByParameter,
             Model model) {
-        boolean invalidPage = isInvalidPage(pageNumber);
-        int currentPage = normalizePage(pageNumber);
-        int currentPageSize = normalizeSize(pageSize);
-        String currentSortBy = normalizeSort(sortBy);
+        boolean invalidPage = isInvalidPage(pageNumberParameter);
+        int pageNumber = normalizePage(pageNumberParameter);
+        int pageSize = normalizeSize(pageSizeParameter);
+        String sortBy = normalizeSort(sortByParameter);
 
         Page<CourseListResponseDto> coursePage =
-                courseService.findPublicCourses(currentSortBy, currentPage, currentPageSize);
+                courseService.findPublicCourses(sortBy, pageNumber, pageSize);
 
-        if (currentPage > DEFAULT_PAGE
-                && (coursePage.getTotalPages() == 0 || currentPage > coursePage.getTotalPages())) {
+        if (pageNumber > DEFAULT_PAGE
+                && (coursePage.getTotalPages() == 0 || pageNumber > coursePage.getTotalPages())) {
             return "redirect:/courses?pageNumber=1&pageSize="
-                    + currentPageSize
+                    + pageSize
                     + "&sortBy="
-                    + currentSortBy;
+                    + sortBy;
         }
 
         if (invalidPage) {
             model.addAttribute("errorMessage", INVALID_PAGE_MESSAGE);
         }
         model.addAttribute("courses", coursePage.getContent());
-        model.addAttribute("currentPage", currentPage);
-        model.addAttribute("pageSize", currentPageSize);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalCount", coursePage.getTotalElements());
         model.addAttribute("totalPages", coursePage.getTotalPages());
-        model.addAttribute("sortBy", currentSortBy);
+        model.addAttribute("sortBy", sortBy);
         return "course/home";
     }
 

@@ -1,0 +1,396 @@
+/* ===========================
+   Reset & Base
+=========================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-size: 14px;
+  color: #1e293b;
+  background-color: #f8fafc;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===========================
+   Sidebar
+=========================== */
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  background-color: #fff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 28px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.logo-icon {
+  font-size: 22px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 20px;
+  text-decoration: none;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-item:hover {
+  background-color: #f1f5f9;
+  color: #1e3a8a;
+}
+
+.nav-item.active {
+  background-color: #e8eef8;
+  color: #1e3a8a;
+  font-weight: 600;
+  border-right: 3px solid #2563eb;
+}
+
+.nav-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.nav-bottom {
+  margin-top: auto;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 12px;
+}
+
+/* ===========================
+   Main Content
+=========================== */
+.main {
+  margin-left: 220px;
+  flex: 1;
+  padding: 36px 40px;
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* ===========================
+   Card
+=========================== */
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px 24px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* ===========================
+   Filter Tabs
+=========================== */
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tab {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: transparent;
+  color: #64748b;
+  transition: background 0.15s, color 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.tab:hover {
+  background-color: #f1f5f9;
+  color: #1e3a8a;
+}
+
+.tab.active {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+/* ===========================
+   Table
+=========================== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead tr {
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.table th:not(:first-child) {
+  text-align: center;
+}
+
+.table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table td:first-child {
+  text-align: left;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: #fafbfc;
+}
+
+/* ===========================
+   Course Name Cell
+=========================== */
+.course-name-cell {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  text-align: left !important;
+}
+
+.course-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.course-icon--blue { background-color: #dbeafe; color: #2563eb; }
+.course-icon--green { background-color: #d1fae5; color: #059669; }
+.course-icon--gray { background-color: #f1f5f9; color: #64748b; }
+.course-icon--purple { background-color: #ede9fe; color: #7c3aed; }
+.course-icon--red { background-color: #fee2e2; color: #dc2626; }
+
+.course-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.course-sub {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ===========================
+   Text Colors
+=========================== */
+.text-danger { color: #ef4444 !important; font-weight: 600; }
+.text-blue { color: #3b82f6 !important; font-weight: 600; }
+
+/* ===========================
+   Status Badge
+=========================== */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge--public { background-color: #d1fae5; color: #059669; }
+.badge--private { background-color: #f1f5f9; color: #64748b; }
+.badge--rejected { background-color: #fee2e2; color: #dc2626; }
+
+/* ===========================
+   Action Buttons
+=========================== */
+.action-cell {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn {
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn--approve {
+  background-color: transparent;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+}
+
+.btn--approve-active {
+  background-color: transparent;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  cursor: pointer;
+}
+
+.btn--approve-active:hover {
+  background-color: #eff6ff;
+}
+
+.btn--reject {
+  background-color: transparent;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+}
+
+.btn--reject-active {
+  background-color: transparent;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  cursor: pointer;
+}
+
+.btn--reject-active:hover {
+  background-color: #fee2e2;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ===========================
+   Table Footer / Pagination
+=========================== */
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.table-info {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background-color: #fff;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.page-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.page-btn--active {
+  background-color: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+  font-weight: 600;
+}
+
+.page-btn--nav {
+  font-size: 16px;
+  color: #94a3b8;
+}
+
+.page-btn.disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
+}

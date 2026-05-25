@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html
+    lang="ko" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <header th:fragment="header" class="header">
 
@@ -12,9 +14,10 @@
     </svg>
     <span>LXP 학습 플랫폼</span>
     </div>
+  </a>
 
-    <!-- 네비게이션 (임시 고정 - Security 구현 후 sec:authorize 추가 예정) -->
-    <nav class="header-nav">
+    <!-- 로그인 전 -->
+    <nav class="header-nav" sec:authorize="isAnonymous()" aria-label="비로그인 네비게이션">
       <a th:href="@{/courses}" class="nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -24,6 +27,26 @@
         <span>강의 목록</span>
       </a>
       <a th:href="@{/auth/login}" class="btn-login-nav">로그인</a>
+    </nav>
+
+    <!-- 로그인 후 -->
+    <nav class="header-nav" sec:authorize="isAuthenticated()" aria-label="로그인 네비게이션">
+      <a th:href="@{/courses}" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>강의 목록</span>
+      </a>
+      <a th:href="@{/members/me/enrollments}" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+             fill="none" stroke="#495057" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>내 강의실</span>
+      </a>
     </nav>
 
 </header>

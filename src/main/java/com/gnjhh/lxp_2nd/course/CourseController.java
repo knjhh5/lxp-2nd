@@ -6,6 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.gnjhh.lxp_2nd.course.dto.CourseDetailResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class CourseController {
@@ -91,4 +96,12 @@ public class CourseController {
         }
         return DEFAULT_SORT;
     }
+  
+    @GetMapping("/courses/{courseId}")
+    public String getCourseDetail(@PathVariable("courseId") Long courseId, Model model) {
+        CourseDetailResponse response = courseService.getCourseDetail(courseId);
+        model.addAttribute("course", response);
+        return "course/detail";
+    }
+
 }

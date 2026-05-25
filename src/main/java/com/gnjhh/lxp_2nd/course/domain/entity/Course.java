@@ -87,5 +87,12 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+      
+    // 강의 상태 변경
+    public void changeStatus(Status newStatus) {
+        if (this.status != Status.PRIVATE) {
+            throw new IllegalStateException("PRIVATE 강의만 변경 가능합니다");
+        }
+        this.status = newStatus;
     }
 }

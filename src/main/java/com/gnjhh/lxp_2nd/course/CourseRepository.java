@@ -3,6 +3,7 @@ package com.gnjhh.lxp_2nd.course;
 import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
 import com.gnjhh.lxp_2nd.course.dto.CourseListResponseDto;
+import com.gnjhh.lxp_2nd.course.dto.CourseAdminListResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -69,5 +70,22 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             @Param("courseStatus") Status courseStatus,
             @Param("enrollmentStatus")
                     com.gnjhh.lxp_2nd.enrollment.domain.vo.Status enrollmentStatus,
-            Pageable pageable);
+      Pageable pageable);
+
+    @Query("""
+                SELECT c.id AS courseId,
+                       c.title AS title,
+                       m.nickname AS instructorName,
+                       c.capacity AS capacity,
+                       c.status AS status,
+                       COUNT(CASE WHEN e.status = 'ACTIVE' THEN 1 END) AS activeCount,
+                       COUNT(CASE WHEN e.status = 'CANCELED' THEN 1 END) AS canceledCount
+                FROM Course c
+                JOIN c.instructor m
+                LEFT JOIN Enrollment e ON e.course = c
+                WHERE (:status IS NULL OR c.status = :status)
+                AND m.userType = 'INSTRUCTOR'
+                GROUP BY c.id, c.title, m.nickname, c.capacity, c.status
+            """)
+    Page<CourseAdminListResponseDto> findCoursesWithEnrollmentCount(@Param("status") Status status, Pageable pageable);
 }

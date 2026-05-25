@@ -35,6 +35,7 @@ public class CourseController {
         return "/course/member/detail-debug";
     }
 
+    // 강의 목록 조회 (테스트 시 필요해서 만든 임시 엔드포인트 - 지오님 pr merge 시에 삭제)
     @GetMapping("/courses")
     public String course() {
         return "course/home";

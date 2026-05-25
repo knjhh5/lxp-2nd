@@ -108,3 +108,30 @@ VALUES (5, 1, TRUE, CURRENT_TIMESTAMP),
 INSERT INTO content_histories (enrollment_id, content_id, is_completed, last_date)
 VALUES (7, 11, TRUE, CURRENT_TIMESTAMP),
        (7, 12, FALSE, CURRENT_TIMESTAMP);
+
+-- ========================================================
+-- [추가] 학생 3 (lxplxp) 의 수강 데이터 (상세 조회 테스트용)
+-- ========================================================
+
+-- [Enrollments] 학생 3의 수강 신청 내역 (총 4개)
+INSERT INTO enrollments (student_id, course_id, status, progress_rate)
+VALUES (3, 1, 'ACTIVE', 33),  -- enrollment_id=9  : Java 강의 진행 중 (3강 중 1강 완료)
+       (3, 3, 'ACTIVE', 100), -- enrollment_id=10 : Spring Boot 완강 (4강 전부 완료)
+       (3, 13, 'ACTIVE', 0),  -- enrollment_id=11 : 알고리즘 신규 신청 (학습 이력 없음)
+       (3, 2, 'CANCELED', 0);
+-- enrollment_id=12 : MySQL 수강 취소 (403 테스트용)
+
+
+-- [Content Histories] 학생 3의 수강 진도 이력
+-- 학생 3 → 1번 강의 (Java): 3강 중 1강만 완료
+INSERT INTO content_histories (enrollment_id, content_id, is_completed, last_date)
+VALUES (9, 1, TRUE, CURRENT_TIMESTAMP),
+       (9, 2, FALSE, CURRENT_TIMESTAMP),
+       (9, 3, FALSE, CURRENT_TIMESTAMP);
+
+-- 학생 3 → 3번 강의 (Spring Boot): 4강 모두 완료 (완강)
+INSERT INTO content_histories (enrollment_id, content_id, is_completed, last_date)
+VALUES (10, 7, TRUE, CURRENT_TIMESTAMP),
+       (10, 8, TRUE, CURRENT_TIMESTAMP),
+       (10, 9, TRUE, CURRENT_TIMESTAMP),
+       (10, 10, TRUE, CURRENT_TIMESTAMP);

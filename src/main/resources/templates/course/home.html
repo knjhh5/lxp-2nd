@@ -60,6 +60,24 @@
     </div>
   </div>
 
+  <div class="pagination" th:if="${totalPages > 1}">
+    <a class="page-btn"
+       th:href="@{/courses(pageNumber=${pageNumber - 1}, pageSize=${pageSize}, sortBy=${sortBy})}"
+       th:if="${pageNumber > 1}">
+      &lt;
+    </a>
+    <a class="page-btn"
+       th:each="i : ${#numbers.sequence(1, totalPages)}"
+       th:href="@{/courses(pageNumber=${i}, pageSize=${pageSize}, sortBy=${sortBy})}"
+       th:text="${i}"
+       th:classappend="${i == pageNumber} ? ' active'"></a>
+    <a class="page-btn"
+       th:href="@{/courses(pageNumber=${pageNumber + 1}, pageSize=${pageSize}, sortBy=${sortBy})}"
+       th:if="${pageNumber < totalPages}">
+      &gt;
+    </a>
+  </div>
+
 </main>
 </body>
 </html>

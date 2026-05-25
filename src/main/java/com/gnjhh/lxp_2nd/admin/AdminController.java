@@ -69,7 +69,7 @@ public class AdminController {
             Status newStatus = Status.valueOf(status);
             adminService.changeCourseStatus(courseId, newStatus);
             redirectAttributes.addFlashAttribute("successMessage", "강의 상태가 변경되었습니다.");
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException | IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 

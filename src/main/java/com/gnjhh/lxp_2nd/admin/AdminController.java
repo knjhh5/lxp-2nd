@@ -2,10 +2,13 @@ package com.gnjhh.lxp_2nd.admin;
 
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListItemResponseDto;
+import com.gnjhh.lxp_2nd.global.exception.CourseNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -27,8 +30,6 @@ public class AdminController {
             @RequestParam(defaultValue = "10") int pageSize,
             Model model,
             RedirectAttributes redirectAttributes) {
-
-        // 로그인 기능 merge 이후 세션 확인 로직 추가
 
         Status statusEnum = null;
 
@@ -57,5 +58,24 @@ public class AdminController {
         model.addAttribute("status", status);
 
         return "admin/home";
+    }
+
+    @PostMapping("/courses/{courseId}")
+    public String changeCourseStatus(
+            @PathVariable("courseId") Long courseId,
+            @RequestParam String status,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            Status newStatus = Status.valueOf(status);
+            adminService.changeCourseStatus(courseId, newStatus);
+            redirectAttributes.addFlashAttribute("successMessage", "강의 상태가 변경되었습니다.");
+        } catch (CourseNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/admin/courses";
     }
 }

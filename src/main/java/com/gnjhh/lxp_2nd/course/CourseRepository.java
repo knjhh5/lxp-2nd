@@ -28,5 +28,4 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             """)
     Page<CourseAdminListResponseDto> findCoursesWithEnrollmentCount(@Param("status") Status status,
             Pageable pageable);
-
 }

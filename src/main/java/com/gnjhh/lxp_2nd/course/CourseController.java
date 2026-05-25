@@ -32,7 +32,7 @@ public class CourseController {
         Long loginMemberId = userDetails.getMember().getId();
         MyCourseDetailResponse course = courseService.getMyCourseDetail(loginMemberId, courseId);
         model.addAttribute("course", course);
-        return "course/member/detail";
+        return "course/member/detail-debug";  // 디버깅용 임시 파일
     }
 
 }

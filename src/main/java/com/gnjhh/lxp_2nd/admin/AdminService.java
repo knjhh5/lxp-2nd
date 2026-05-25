@@ -5,6 +5,7 @@ import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListItemResponseDto;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListResponseDto;
+import com.gnjhh.lxp_2nd.global.exception.CourseNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +39,7 @@ public class AdminService {
     @Transactional
     public void changeCourseStatus(Long courseId, Status status) {
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다."));
+                .orElseThrow(CourseNotFoundException::new);
         course.changeStatus(status);
     }
 }

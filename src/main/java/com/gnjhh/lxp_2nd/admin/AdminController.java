@@ -2,6 +2,7 @@ package com.gnjhh.lxp_2nd.admin;
 
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListItemResponseDto;
+import com.gnjhh.lxp_2nd.global.exception.CourseNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,7 +62,7 @@ public class AdminController {
 
     @PostMapping("/courses/{courseId}")
     public String changeCourseStatus(
-            @PathVariable Long courseId,
+            @PathVariable("courseId") Long courseId,
             @RequestParam String status,
             RedirectAttributes redirectAttributes) {
 
@@ -69,7 +70,9 @@ public class AdminController {
             Status newStatus = Status.valueOf(status);
             adminService.changeCourseStatus(courseId, newStatus);
             redirectAttributes.addFlashAttribute("successMessage", "강의 상태가 변경되었습니다.");
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } catch (CourseNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
 

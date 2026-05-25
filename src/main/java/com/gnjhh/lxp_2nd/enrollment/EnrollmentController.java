@@ -2,6 +2,7 @@ package com.gnjhh.lxp_2nd.enrollment;
 
 import com.gnjhh.lxp_2nd.course.CourseService;
 import com.gnjhh.lxp_2nd.course.dto.CourseDetailDto;
+import com.gnjhh.lxp_2nd.course.dto.CourseDetailResponse;
 import com.gnjhh.lxp_2nd.enrollment.domain.entity.Enrollment;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,17 +25,6 @@ public class EnrollmentController {
             CourseService courseService) {
         this.enrollmentService = enrollmentService;
         this.courseService = courseService;
-    }
-
-    @GetMapping("/courses/{courseId}")
-    public String courseDetail(@PathVariable("courseId") Long courseId, Model model) {
-        try {
-            CourseDetailDto dto = courseService.getCourseDetail(courseId);
-            model.addAttribute("course", dto);
-            return "course/detail";
-        } catch (IllegalArgumentException e) {
-            return "redirect:/error/404";
-        }
     }
 
     @GetMapping("/course/member/detail")
@@ -86,7 +76,7 @@ public class EnrollmentController {
                 return "redirect:/course/member/home";
             }
 
-            CourseDetailDto dto = courseService.getCourseDetail(courseId);
+            CourseDetailResponse dto = courseService.getCourseDetail(courseId);
             model.addAttribute("course", dto);
             model.addAttribute("errorMessage", msg);
             return "course/detail";

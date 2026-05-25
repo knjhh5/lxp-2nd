@@ -16,7 +16,7 @@ public class CourseController {
     }
 
     @GetMapping("/courses/{courseId}")
-    public String getCourseDetail(@PathVariable Long courseId, Model model) {
+    public String getCourseDetail(@PathVariable("courseId") Long courseId, Model model) {
         CourseDetailResponse response = courseService.getCourseDetail(courseId);
         model.addAttribute("course", response);
         return "course/detail";

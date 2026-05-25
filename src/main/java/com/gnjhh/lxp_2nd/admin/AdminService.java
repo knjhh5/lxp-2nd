@@ -1,9 +1,11 @@
 package com.gnjhh.lxp_2nd.admin;
 
 import com.gnjhh.lxp_2nd.course.CourseRepository;
+import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListItemResponseDto;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListResponseDto;
+import com.gnjhh.lxp_2nd.global.exception.CourseNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,5 +34,12 @@ public class AdminService {
                 return new CourseAdminListItemResponseDto(dto, null, null, null);
             }
         });
+    }
+
+    @Transactional
+    public void changeCourseStatus(Long courseId, Status status) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(CourseNotFoundException::new);
+        course.changeStatus(status);
     }
 }

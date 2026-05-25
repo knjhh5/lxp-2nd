@@ -62,7 +62,6 @@ body {
   color: #64748b;
   font-size: 14px;
   font-weight: 500;
-  border-radius: 0;
   transition: background 0.15s, color 0.15s;
 }
 
@@ -156,6 +155,8 @@ body {
   background-color: transparent;
   color: #64748b;
   transition: background 0.15s, color 0.15s;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .tab:hover {
@@ -237,30 +238,11 @@ body {
   flex-shrink: 0;
 }
 
-.course-icon--blue {
-  background-color: #dbeafe;
-  color: #2563eb;
-}
-
-.course-icon--green {
-  background-color: #d1fae5;
-  color: #059669;
-}
-
-.course-icon--gray {
-  background-color: #f1f5f9;
-  color: #64748b;
-}
-
-.course-icon--purple {
-  background-color: #ede9fe;
-  color: #7c3aed;
-}
-
-.course-icon--red {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
+.course-icon--blue { background-color: #dbeafe; color: #2563eb; }
+.course-icon--green { background-color: #d1fae5; color: #059669; }
+.course-icon--gray { background-color: #f1f5f9; color: #64748b; }
+.course-icon--purple { background-color: #ede9fe; color: #7c3aed; }
+.course-icon--red { background-color: #fee2e2; color: #dc2626; }
 
 .course-name {
   font-size: 14px;
@@ -277,15 +259,8 @@ body {
 /* ===========================
    Text Colors
 =========================== */
-.text-danger {
-  color: #ef4444 !important;
-  font-weight: 600;
-}
-
-.text-blue {
-  color: #3b82f6 !important;
-  font-weight: 600;
-}
+.text-danger { color: #ef4444 !important; font-weight: 600; }
+.text-blue { color: #3b82f6 !important; font-weight: 600; }
 
 /* ===========================
    Status Badge
@@ -298,20 +273,9 @@ body {
   font-weight: 600;
 }
 
-.badge--public {
-  background-color: #d1fae5;
-  color: #059669;
-}
-
-.badge--private {
-  background-color: #f1f5f9;
-  color: #64748b;
-}
-
-.badge--rejected {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
+.badge--public { background-color: #d1fae5; color: #059669; }
+.badge--private { background-color: #f1f5f9; color: #64748b; }
+.badge--rejected { background-color: #fee2e2; color: #dc2626; }
 
 /* ===========================
    Action Buttons
@@ -324,23 +288,29 @@ body {
 }
 
 .btn {
-  padding: 5px 12px;
+  padding: 5px 14px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  border: none;
   transition: opacity 0.15s;
-}
-
-.btn:hover {
-  opacity: 0.8;
 }
 
 .btn--approve {
   background-color: transparent;
   color: #94a3b8;
   border: 1px solid #e2e8f0;
+}
+
+.btn--approve-active {
+  background-color: transparent;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  cursor: pointer;
+}
+
+.btn--approve-active:hover {
+  background-color: #eff6ff;
 }
 
 .btn--reject {
@@ -350,9 +320,19 @@ body {
 }
 
 .btn--reject-active {
-  background-color: #fee2e2;
+  background-color: transparent;
   color: #dc2626;
-  border: 1px solid #fecaca;
+  border: 1px solid #dc2626;
+  cursor: pointer;
+}
+
+.btn--reject-active:hover {
+  background-color: #fee2e2;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* ===========================
@@ -389,6 +369,7 @@ body {
   font-size: 13px;
   color: #64748b;
   cursor: pointer;
+  text-decoration: none;
   transition: background 0.15s, color 0.15s;
 }
 
@@ -406,4 +387,10 @@ body {
 .page-btn--nav {
   font-size: 16px;
   color: #94a3b8;
+}
+
+.page-btn.disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
 }

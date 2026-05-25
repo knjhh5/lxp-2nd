@@ -91,4 +91,12 @@ public class Course {
     public List<Content> getContents(){return contents;}
 
 
+
+    // 강의 상태 변경
+    public void changeStatus(Status newStatus) {
+        if (this.status != Status.PRIVATE) {
+            throw new IllegalStateException("PRIVATE 강의만 변경 가능합니다");
+        }
+        this.status = newStatus;
+    }
 }

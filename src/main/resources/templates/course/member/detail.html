@@ -46,10 +46,10 @@
           </form>
         </div>
 
-        <div class="course-detail-instructor"
-             th:text="${enrollment.course.instructorName} + ' 강사'">강사명</div>
+        <div th:text="${enrollment.course.instructor.nickname} + ' 강사'">강사명</div>
         <div class="course-detail-desc"
-             th:text="${enrollment.course.description}">강의 설명</div>
+             th:text="${enrollment.course.description}">강의 설명
+        </div>
 
         <!-- 진도율 섹션 -->
         <div class="progress-section">
@@ -99,7 +99,7 @@
 
             <div class="curriculum-item-info">
               <span class="curriculum-item-name"
-                    th:text="'#' + ${content.orderIndex} + ' ' + ${content.title}">콘텐츠명</span>
+                    th:text="'#' + ${content.orderIndex} + ' ' + ${content.contentTitle}">콘텐츠명</span>
             </div>
           </div>
 

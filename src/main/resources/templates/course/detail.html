@@ -42,7 +42,8 @@
         <div class="course-detail-info-top">
           <h1 class="course-detail-title" th:text="${course.title}">강의 제목</h1>
           <!-- 수강신청 버튼 (비로그인 또는 미수강 상태) -->
-          <form th:action="@{/courses/{id}/enroll(id=${course.id})}" method="post">
+          <form th:action="@{/enrollments}" method="post">
+            <input type="hidden" name="courseId" th:value="${course.id}">
             <button type="submit" class="btn-enroll">수강 신청</button>
           </form>
         </div>
@@ -59,16 +60,7 @@
               <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
             </svg>
             <span th:text="${course.enrollCount} + '명 수강 중'">0명 수강 중</span>
-          </div>
-          <div class="course-meta-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            <span th:text="${course.totalHours} + '시간'">0시간</span>
-          </div>
+
           <div class="course-meta-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -99,9 +91,8 @@
             </svg>
             <div class="curriculum-item-info">
                                 <span class="curriculum-item-name">
-                                    <span th:text="'#' + ${stat.index + 1} + ' ' + ${content.title}">강의명</span>
+                                    <span th:text="'#' + ${stat.index + 1} + ' ' + ${content.contentTitle}">강의명</span>
                                 </span>
-              <span class="curriculum-item-duration" th:text="${content.durationMinutes} + '분'">0분</span>
             </div>
           </div>
         </li>

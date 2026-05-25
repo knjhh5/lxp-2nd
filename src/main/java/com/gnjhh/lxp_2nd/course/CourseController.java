@@ -39,7 +39,8 @@ public class CourseController {
         Page<CourseListResponseDto> coursePage =
                 courseService.findPublicCourses(currentSortBy, currentPage, currentPageSize);
 
-        if (coursePage.getTotalPages() > 0 && currentPage > coursePage.getTotalPages()) {
+        if (currentPage > DEFAULT_PAGE
+                && (coursePage.getTotalPages() == 0 || currentPage > coursePage.getTotalPages())) {
             return "redirect:/courses?pageNumber=1&pageSize="
                     + currentPageSize
                     + "&sortBy="

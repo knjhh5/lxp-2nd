@@ -47,7 +47,9 @@ public class EnrollmentController {
                 enrollmentService.findMyEnrollments(
                         loginMemberId, currentStatus, currentPage, currentPageSize);
 
-        if (enrollmentPage.getTotalPages() > 0 && currentPage > enrollmentPage.getTotalPages()) {
+        if (currentPage > DEFAULT_PAGE
+                && (enrollmentPage.getTotalPages() == 0
+                        || currentPage > enrollmentPage.getTotalPages())) {
             return "redirect:/member/courses?pageNumber=1&pageSize="
                     + currentPageSize
                     + "&status="

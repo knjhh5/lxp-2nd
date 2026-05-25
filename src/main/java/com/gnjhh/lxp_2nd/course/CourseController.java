@@ -32,12 +32,7 @@ public class CourseController {
         Long loginMemberId = userDetails.getMember().getId();
         MyCourseDetailResponse course = courseService.getMyCourseDetail(loginMemberId, courseId);
         model.addAttribute("course", course);
-        return "/course/member/detail-debug";
+        return "/course/member/detail";
     }
 
-    // 강의 목록 조회 (테스트 시 필요해서 만든 임시 엔드포인트 - 지오님 pr merge 시에 삭제)
-    @GetMapping("/courses")
-    public String course() {
-        return "course/home";
-    }
 }

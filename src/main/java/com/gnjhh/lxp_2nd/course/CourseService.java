@@ -9,6 +9,7 @@ import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import com.gnjhh.lxp_2nd.course.dto.CourseDetailResponse;
 import com.gnjhh.lxp_2nd.course.dto.MyCourseDetailResponse;
 import com.gnjhh.lxp_2nd.enrollment.EnrollmentRepository;
+import com.gnjhh.lxp_2nd.global.exception.CourseNotFoundException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class CourseService {
     public CourseDetailResponse getCourseDetail(Long courseId) {
         // 강의 조회
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다"));
+                .orElseThrow(CourseNotFoundException::new);
 
         // 해당 강의의 콘텐츠 목록 조회
         List<Content> contents = contentRepository.findByCourseIdOrderByOrderIndexAsc(courseId);
@@ -49,7 +50,7 @@ public class CourseService {
     public MyCourseDetailResponse getMyCourseDetail(Long loginMemberId, Long courseId) {
         // 강의 조회
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다"));
+                .orElseThrow(CourseNotFoundException::new);
 
         // 본인이 수강 신청한 강의인지 확인 (수강 취소이면 안됨)
         if (!enrollmentRepository.existsActiveEnrollment(loginMemberId, courseId)) {
@@ -90,7 +91,7 @@ public class CourseService {
                 contentResponses
         );
     }
-    
+
     private int calculateProgressRate(int totalCount, int completedCount) {
         if (totalCount == 0) {
             return 0;

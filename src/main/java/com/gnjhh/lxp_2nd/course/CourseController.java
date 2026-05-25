@@ -26,13 +26,17 @@ public class CourseController {
     }
 
     @GetMapping("/members/me/enrollments/{courseId}")
-    public String getMyCourseDetail(@PathVariable Long courseId,
+    public String getMyCourseDetail(@PathVariable("courseId") Long courseId,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             Model model) {
         Long loginMemberId = userDetails.getMember().getId();
         MyCourseDetailResponse course = courseService.getMyCourseDetail(loginMemberId, courseId);
         model.addAttribute("course", course);
-        return "course/member/detail-debug";  // 디버깅용 임시 파일
+        return "/course/member/detail-debug";
     }
 
+    @GetMapping("/courses")
+    public String course() {
+        return "course/home";
+    }
 }

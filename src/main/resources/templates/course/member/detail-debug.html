@@ -8,22 +8,31 @@
       font-family: monospace;
       padding: 20px;
       line-height: 1.6;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      color: #d32f2f;
+    }
+
+    .section {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 16px;
+      margin-bottom: 16px;
+      border-radius: 6px;
     }
 
     .label {
       color: #888;
       font-size: 12px;
+      display: inline-block;
+      min-width: 80px;
     }
 
     .value {
       font-weight: bold;
-    }
-
-    .section {
-      border: 1px solid #ddd;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-radius: 4px;
+      color: #1976d2;
     }
 
     .done {
@@ -38,6 +47,7 @@
     table {
       border-collapse: collapse;
       margin-top: 8px;
+      width: 100%;
     }
 
     th, td {
@@ -49,29 +59,53 @@
     th {
       background: #f5f5f5;
     }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #eee;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #1976d2;
+    }
   </style>
 </head>
 <body>
 <h1>⚠️ 디버그 뷰 (PR 머지 전 임시)</h1>
 
 <div class="section">
-  <h2>강의 정보</h2>
-  <div><span class="label">ID:</span> <span class="value" th:text="${course.id}"></span></div>
-  <div><span class="label">제목:</span> <span class="value" th:text="${course.title}"></span></div>
-  <div><span class="label">강사:</span> <span class="value" th:text="${course.instructorName}"></span>
+  <h2>📚 강의 정보</h2>
+  <div><span class="label">강의 ID:</span> <span class="value" th:text="${course.courseId}"></span>
   </div>
+  <div><span class="label">제목:</span> <span class="value" th:text="${course.title}"></span></div>
+  <div><span class="label">강사:</span> <span class="value"
+                                            th:text="${course.instructorNickname}"></span></div>
   <div><span class="label">설명:</span> <span th:text="${course.description}"></span></div>
-  <div><span class="label">진도율:</span> <span class="value"
-                                             th:text="${course.progressRate} + '%'"></span></div>
 </div>
 
 <div class="section">
-  <h2>콘텐츠 목록 (<span th:text="${#lists.size(course.contents)}"></span>개)</h2>
+  <h2>📊 진도율</h2>
+  <div>
+    <span class="label">진도율:</span>
+    <span class="value" th:text="${course.progressRate} + '%'"></span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-bar-fill" th:style="'width: ' + ${course.progressRate} + '%'"></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>📝 콘텐츠 목록 (<span th:text="${#lists.size(course.contents)}"></span>개)</h2>
   <table>
     <thead>
     <tr>
       <th>순서</th>
-      <th>ID</th>
+      <th>콘텐츠 ID</th>
       <th>제목</th>
       <th>완료 여부</th>
     </tr>
@@ -79,12 +113,15 @@
     <tbody>
     <tr th:each="content : ${course.contents}">
       <td th:text="${content.orderIndex}"></td>
-      <td th:text="${content.id}"></td>
-      <td th:text="${content.title}"></td>
+      <td th:text="${content.contentId}"></td>
+      <td th:text="${content.contentTitle}"></td>
       <td>
         <span th:if="${content.completed}" class="done">✅ 완료</span>
         <span th:unless="${content.completed}" class="todo">⬜ 미완료</span>
       </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(course.contents)}">
+      <td colspan="4" style="text-align:center; color:#999;">콘텐츠가 없습니다.</td>
     </tr>
     </tbody>
   </table>
@@ -92,7 +129,5 @@
 
 <hr>
 <p style="color:#999; font-size:12px;">
-  이 페이지는 백엔드 동작 확인용 임시 뷰입니다. 실제 뷰는 <code>course/member/detail.html</code>에서 별도 작업 중입니다.
-</p>
-</body>
-</html>
+  이 페이지는 백엔드 동작 확인용 임시 뷰입니다.<br>
+  정식 뷰는 <code>course/member/detail.html</code>에서 별도 작업 중이며, 후속 PR에서 컨트롤러 반환값을 변경할 예정입니다.

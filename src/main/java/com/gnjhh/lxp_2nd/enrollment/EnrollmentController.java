@@ -1,8 +1,9 @@
 package com.gnjhh.lxp_2nd.enrollment;
 
 import com.gnjhh.lxp_2nd.enrollment.dto.EnrollmentListResponseDto;
-import jakarta.servlet.http.HttpSession;
+import com.gnjhh.lxp_2nd.global.security.CustomUserDetails;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,12 +31,12 @@ public class EnrollmentController {
             @RequestParam(defaultValue = "1") String pageNumber,
             @RequestParam(defaultValue = "12") String pageSize,
             @RequestParam(defaultValue = "ongoing") String status,
-            HttpSession session,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model) {
-        Long loginMemberId = (Long) session.getAttribute("loginMemberId");
-        if (loginMemberId == null) {
+        if (customUserDetails == null) {
             return "redirect:/auth/login";
         }
+        Long loginMemberId = customUserDetails.getMember().getId();
 
         boolean invalidPage = isInvalidPage(pageNumber);
         int currentPage = normalizePage(pageNumber);

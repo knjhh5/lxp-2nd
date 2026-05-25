@@ -87,7 +87,8 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-      
+    }
+
     // 강의 상태 변경
     public void changeStatus(Status newStatus) {
         if (this.status != Status.PRIVATE) {

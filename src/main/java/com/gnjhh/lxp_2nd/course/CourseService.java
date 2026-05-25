@@ -1,60 +1,35 @@
 package com.gnjhh.lxp_2nd.course;
 
 import com.gnjhh.lxp_2nd.content.ContentRepository;
+import com.gnjhh.lxp_2nd.content.domain.entity.Content;
 import com.gnjhh.lxp_2nd.course.domain.entity.Course;
-import com.gnjhh.lxp_2nd.course.dto.CourseDetailDto;
-import com.gnjhh.lxp_2nd.enrollment.EnrollmentRepository;
-import com.gnjhh.lxp_2nd.enrollment.domain.vo.Status;
-import com.gnjhh.lxp_2nd.member.MemberRepository;
+import com.gnjhh.lxp_2nd.course.dto.CourseDetailResponse;
+import com.gnjhh.lxp_2nd.global.exception.CourseNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CourseService {
 
+    private final CourseRepository courseRepository;
     private final ContentRepository contentRepository;
-    private CourseRepository courseRepository;
-    private EnrollmentRepository enrollmentRepository;
-    private MemberRepository memberRepository;
 
     public CourseService(CourseRepository courseRepository,
-            EnrollmentRepository enrollmentRepository, MemberRepository memberRepository,
             ContentRepository contentRepository) {
         this.courseRepository = courseRepository;
-        this.enrollmentRepository = enrollmentRepository;
-        this.memberRepository = memberRepository;
         this.contentRepository = contentRepository;
     }
 
     @Transactional(readOnly = true)
-    public CourseDetailDto getCourseDetail(Long courseId) {
-
+    public CourseDetailResponse getCourseDetail(Long courseId) {
+        // 강의 조회
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다."));
+                .orElseThrow(CourseNotFoundException::new);
 
-        int enrollCount = enrollmentRepository
-                .countByCourseIdAndStatus(courseId, Status.ACTIVE);
+        // 해당 강의의 콘텐츠 목록 조회
+        List<Content> contents = contentRepository.findByCourseIdOrderByOrderIndexAsc(courseId);
 
-        List<CourseDetailDto.ContentDto> contentDtos = contentRepository
-                .findByCourseIdOrderByOrderIndex(courseId)
-                .stream()
-                .map(c -> new CourseDetailDto.ContentDto(c.getContentTitle(), 0))
-                .collect(Collectors.toList());
-
-        return new CourseDetailDto(
-                course.getId(),
-                course.getTitle(),
-                course.getInstructor().getNickname(),
-                course.getDescription(),
-                null,
-                enrollCount,
-                course.getCapacity(),
-                contentDtos
-
-        );
+        return CourseDetailResponse.of(course, contents);
     }
-
-
 }

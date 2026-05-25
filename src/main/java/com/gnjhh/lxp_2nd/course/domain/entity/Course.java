@@ -19,6 +19,7 @@ import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "courses")
@@ -47,6 +48,9 @@ public class Course {
     @Column(name = "status", nullable = false)
     private Status status = Status.PRIVATE;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     protected Course() {
     }
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
@@ -62,6 +66,7 @@ public class Course {
         this.description = description;
         this.capacity = capacity;
         this.status = Status.PRIVATE;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -91,6 +96,10 @@ public class Course {
     public List<Content> getContents(){return contents;}
 
 
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
     // 강의 상태 변경
     public void changeStatus(Status newStatus) {

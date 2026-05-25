@@ -4,6 +4,7 @@ import com.gnjhh.lxp_2nd.course.domain.entity.Course;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
+import com.gnjhh.lxp_2nd.course.dto.CourseListResponseDto;
 import com.gnjhh.lxp_2nd.course.dto.CourseAdminListResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,66 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from Course c where c.id = :id")
     Optional<Course> findByIdWithLock(@Param("id") Long id);
+
+    @Query(
+            value = """
+                    select new com.gnjhh.lxp_2nd.course.dto.CourseListResponseDto(
+                        course.id,
+                        course.title,
+                        instructor.nickname,
+                        course.description,
+                        course.capacity,
+                        count(enrollment.id)
+                    )
+                    from Course course
+                    join course.instructor instructor
+                    left join Enrollment enrollment
+                        on enrollment.course = course and enrollment.status = :enrollmentStatus
+                    where course.status = :courseStatus
+                    group by course.id, course.title, instructor.nickname,
+                        course.description, course.capacity, course.createdAt
+                    order by course.createdAt desc, course.id desc
+                    """,
+            countQuery = """
+                    select count(course)
+                    from Course course
+                    where course.status = :courseStatus
+                    """)
+    Page<CourseListResponseDto> findPublicCoursesOrderByLatest(
+            @Param("courseStatus") Status courseStatus,
+            @Param("enrollmentStatus")
+                    com.gnjhh.lxp_2nd.enrollment.domain.vo.Status enrollmentStatus,
+            Pageable pageable);
+
+    @Query(
+            value = """
+                    select new com.gnjhh.lxp_2nd.course.dto.CourseListResponseDto(
+                        course.id,
+                        course.title,
+                        instructor.nickname,
+                        course.description,
+                        course.capacity,
+                        count(enrollment.id)
+                    )
+                    from Course course
+                    join course.instructor instructor
+                    left join Enrollment enrollment
+                        on enrollment.course = course and enrollment.status = :enrollmentStatus
+                    where course.status = :courseStatus
+                    group by course.id, course.title, instructor.nickname,
+                        course.description, course.capacity, course.createdAt
+                    order by count(enrollment.id) desc, course.createdAt desc, course.id desc
+                    """,
+            countQuery = """
+                    select count(course)
+                    from Course course
+                    where course.status = :courseStatus
+                    """)
+    Page<CourseListResponseDto> findPublicCoursesOrderByPopularity(
+            @Param("courseStatus") Status courseStatus,
+            @Param("enrollmentStatus")
+                    com.gnjhh.lxp_2nd.enrollment.domain.vo.Status enrollmentStatus,
+      Pageable pageable);
 
     @Query("""
                 SELECT c.id AS courseId,
@@ -32,6 +93,5 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
                 AND m.userType = 'INSTRUCTOR'
                 GROUP BY c.id, c.title, m.nickname, c.capacity, c.status
             """)
-    Page<CourseAdminListResponseDto> findCoursesWithEnrollmentCount(@Param("status") Status status,
-            Pageable pageable);
+    Page<CourseAdminListResponseDto> findCoursesWithEnrollmentCount(@Param("status") Status status, Pageable pageable);
 }

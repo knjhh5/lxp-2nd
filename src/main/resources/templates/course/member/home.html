@@ -9,6 +9,9 @@
 </head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
+<script th:if="${not #strings.isEmpty(errorMessage)}">
+  alert("[[${errorMessage}]]");
+</script>
 <main>
 
   <div class="myroom-header">

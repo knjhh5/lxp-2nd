@@ -25,9 +25,9 @@ public class AdminController {
 
     @GetMapping("/courses")
     public String getCourseListForAdmin(
-            @RequestParam(required = false) String status,
-            @RequestParam(defaultValue = "1") int pageNumber,
-            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false, name = "status") String status,
+            @RequestParam(defaultValue = "1", name = "pageNumber") int pageNumber,
+            @RequestParam(defaultValue = "10", name = "pageSize") int pageSize,
             Model model,
             RedirectAttributes redirectAttributes) {
 
@@ -44,14 +44,17 @@ public class AdminController {
 
         if (pageNumber < 1) {
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 페이지 번호입니다.");
-            return "redirect:/admin/courses?pageNumber=1" + (status != null ? "&status=" + status : "");
+            return "redirect:/admin/courses?pageNumber=1" + (status != null ? "&status=" + status
+                    : "");
         }
 
-        Page<CourseAdminListItemResponseDto> courses = adminService.getCourseListForAdmin(statusEnum, pageNumber, pageSize);
+        Page<CourseAdminListItemResponseDto> courses = adminService.getCourseListForAdmin(
+                statusEnum, pageNumber, pageSize);
 
         if (courses.getTotalPages() > 0 && pageNumber > courses.getTotalPages()) {
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 페이지 번호입니다.");
-            return "redirect:/admin/courses?pageNumber=1" + (status != null ? "&status=" + status : "");
+            return "redirect:/admin/courses?pageNumber=1" + (status != null ? "&status=" + status
+                    : "");
         }
 
         model.addAttribute("courses", courses);
@@ -63,7 +66,7 @@ public class AdminController {
     @PostMapping("/courses/{courseId}")
     public String changeCourseStatus(
             @PathVariable("courseId") Long courseId,
-            @RequestParam String status,
+            @RequestParam(name = "status") String status,
             RedirectAttributes redirectAttributes) {
 
         try {

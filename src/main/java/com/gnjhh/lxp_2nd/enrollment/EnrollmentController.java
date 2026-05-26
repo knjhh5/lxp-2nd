@@ -64,13 +64,12 @@ public class EnrollmentController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             RedirectAttributes rttr, Model model) {
 
-        Long studentId = userDetails.getMember().getId();
-
-        if (studentId == null) {
+        if (userDetails == null) {
             rttr.addFlashAttribute("errorMessage", "로그인이 필요한 서비스입니다.");
             return "redirect:/auth/login";
 
         }
+        Long studentId = userDetails.getMember().getId();
 
         try {
             Enrollment enrollment = enrollmentService.enroll(studentId, courseId);
@@ -88,7 +87,7 @@ public class EnrollmentController {
             if (msg.contains("이미 신청한 강의입니다.")) {
                 log.warn("이미 신청한 강의입니다.");
                 rttr.addFlashAttribute("errorMessage", msg);
-                return "redirect:/course/member/home";
+                return "redirect:/member/courses";
             }
 
             CourseDetailResponse dto = courseService.getCourseDetail(courseId);
@@ -98,7 +97,7 @@ public class EnrollmentController {
 
         } catch (DataIntegrityViolationException e) {
             rttr.addFlashAttribute("errorMessage", "이미 신청한 강의입니다.");
-            return "redirect:/course/member/home";
+            return "redirect:/member/courses";
         }
 
 

@@ -1,5 +1,6 @@
 package com.gnjhh.lxp_2nd.course.domain.entity;
 
+import com.gnjhh.lxp_2nd.content.domain.entity.Content;
 import com.gnjhh.lxp_2nd.course.domain.vo.Status;
 import com.gnjhh.lxp_2nd.member.domain.entity.Member;
 import jakarta.persistence.Column;
@@ -13,7 +14,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDateTime;
 
 @Entity
@@ -48,6 +53,9 @@ public class Course {
 
     protected Course() {
     }
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    @OrderBy("orderIndex ASC")
+    private List<Content> contents = new ArrayList<>();
 
     public Course(String title, Member instructor, String description, int capacity) {
         if (capacity < 1) {
@@ -84,6 +92,10 @@ public class Course {
     public Status getStatus() {
         return status;
     }
+
+    public List<Content> getContents(){return contents;}
+
+
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

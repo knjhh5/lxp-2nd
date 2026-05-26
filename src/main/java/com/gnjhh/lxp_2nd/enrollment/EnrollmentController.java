@@ -3,16 +3,18 @@ package com.gnjhh.lxp_2nd.enrollment;
 import com.gnjhh.lxp_2nd.course.CourseService;
 import com.gnjhh.lxp_2nd.course.dto.CourseDetailResponse;
 import com.gnjhh.lxp_2nd.enrollment.domain.entity.Enrollment;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.dao.DataIntegrityViolationException;
 import com.gnjhh.lxp_2nd.enrollment.dto.EnrollmentListResponseDto;
 import com.gnjhh.lxp_2nd.global.security.CustomUserDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -27,6 +29,7 @@ public class EnrollmentController {
     private static final String ONGOING_STATUS = "ongoing";
     private static final String DONE_STATUS = "done";
     private static final String INVALID_PAGE_MESSAGE = "유효하지 않은 페이지 번호입니다";
+    private static final Logger log = LoggerFactory.getLogger(EnrollmentController.class);
 
     private final EnrollmentService enrollmentService;
     private final CourseService courseService;
@@ -56,8 +59,8 @@ public class EnrollmentController {
     }
 
 
-    @PostMapping("/enrollments")
-    public String enrollcourse(@RequestParam("courseId") Long courseId,
+    @PostMapping("/courses/{courseId}/enroll")
+    public String enrollcourse(@PathVariable("courseId") Long courseId,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             RedirectAttributes rttr, Model model) {
 
@@ -74,7 +77,7 @@ public class EnrollmentController {
             rttr.addFlashAttribute("message", "수강 신청이 완료되었습니다.");
             rttr.addFlashAttribute("enrollmentId", enrollment.getId());
 
-            return "redirect:/course/member/detail";
+            return "redirect:/members/me/enrollments";
 
         } catch (IllegalArgumentException e) {
             rttr.addFlashAttribute("errorMessage", e.getMessage());
@@ -83,6 +86,7 @@ public class EnrollmentController {
         } catch (IllegalStateException e) {
             String msg = e.getMessage();
             if (msg.contains("이미 신청한 강의입니다.")) {
+                log.warn("이미 신청한 강의입니다.");
                 rttr.addFlashAttribute("errorMessage", msg);
                 return "redirect:/course/member/home";
             }
@@ -102,9 +106,9 @@ public class EnrollmentController {
 
     @GetMapping({"/member/courses", "/members/me/enrollments"})
     public String getMyEnrollments(
-            @RequestParam(defaultValue = "1") String pageNumber,
-            @RequestParam(defaultValue = "12") String pageSize,
-            @RequestParam(defaultValue = "ongoing") String status,
+            @RequestParam(defaultValue = "1", name = "pageNumber") String pageNumber,
+            @RequestParam(defaultValue = "12", name = "pageSize") String pageSize,
+            @RequestParam(defaultValue = "ongoing", name = "status") String status,
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             Model model) {
         if (customUserDetails == null) {
@@ -123,7 +127,7 @@ public class EnrollmentController {
 
         if (currentPage > DEFAULT_PAGE
                 && (enrollmentPage.getTotalPages() == 0
-                        || currentPage > enrollmentPage.getTotalPages())) {
+                || currentPage > enrollmentPage.getTotalPages())) {
             return "redirect:/member/courses?pageNumber=1&pageSize="
                     + currentPageSize
                     + "&status="

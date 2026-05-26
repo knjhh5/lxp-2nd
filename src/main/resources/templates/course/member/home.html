@@ -83,7 +83,7 @@
         <!-- 수강 중 (progressRate < 100) -->
         <th:block th:if="${enrollment.progressRate < 100}">
           <a class="btn-study"
-             th:href="@{/member/courses/{id}(id=${enrollment.course.id})}">학습하기</a>
+             th:href="@{/members/me/enrollments/{id}(id=${enrollment.course.id})}">학습하기</a>
           <form th:action="@{/member/courses/{id}/cancel(id=${enrollment.course.id})}"
                 method="post" style="margin:0;">
             <button type="submit" class="btn-cancel-enroll">

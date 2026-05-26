@@ -3,6 +3,7 @@ package com.gnjhh.lxp_2nd.global.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +24,14 @@ public class GlobalExceptionHandler {
         log.warn("리소스를 찾을 수 없음: {}", e.getMessage());
         model.addAttribute("errorMessage", e.getMessage());
         return "error/404";
+    }
+
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleAccessDeniedException(AccessDeniedException e, Model model) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error/403";
     }
 
 }

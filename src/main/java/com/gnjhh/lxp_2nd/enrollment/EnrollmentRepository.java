@@ -210,4 +210,17 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
             @Param("studentId") Long studentId,
             @Param("status") Status status,
             @Param("learningStatus") String learningStatus);
+
+    @Query("""
+            SELECT COUNT(e) > 0
+            FROM Enrollment e
+            WHERE e.student.id = :studentId
+              AND e.course.id = :courseId
+              AND e.status = com.gnjhh.lxp_2nd.enrollment.domain.vo.Status.ACTIVE
+            """)
+    boolean existsActiveEnrollment(
+            @Param("studentId") Long studentId,
+            @Param("courseId") Long courseId
+    );
+
 }
